@@ -3,8 +3,6 @@ package xyz.strashi.PayMyBuddy.model;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,13 +15,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-//@Embeddable
 @Data
-//@AllArgsConstructor
-//@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name="users")
 public class User {
 	
+	public User(String firstName, String lastName, float balance) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.balance = balance;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
