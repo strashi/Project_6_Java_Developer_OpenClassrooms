@@ -17,8 +17,11 @@ import xyz.strashi.PayMyBuddy.service.UserService;
 @Controller
 public class LoginController {
 
-	@Autowired
 	private UserService userService;
+	
+	public LoginController(UserService userService) {
+		this.userService = userService;
+	}
 	
 	@GetMapping("/")
 	//@RolesAllowed("USER")

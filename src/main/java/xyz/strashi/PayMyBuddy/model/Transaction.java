@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,15 +26,16 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long transactionId;
 	@ManyToOne
-	private User debtor;
+	private User debitor;
 	@ManyToOne
 	private User creditor;
 	private float amount;
 	private String description;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date date;
-	private String status;
-	private float balanceDebtorBefore;
-	private float balanceDebtorAfter;
+	private Enum<Status> status;
+	private float balanceDebitorBefore;
+	private float balanceDebitorAfter;
 	private float balanceCreditorBefore;
 	private float balanceCreditorAfter;
 

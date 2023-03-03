@@ -1,6 +1,9 @@
 package xyz.strashi.PayMyBuddy.dto;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ManyToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +24,9 @@ public class UserDTO {
 	private String lastName;
 	
 	private float balance;
+	private String ibanNummer;
+	
+	@ManyToMany
+	List<UserDTO> friendsDTO;
 	
 }
