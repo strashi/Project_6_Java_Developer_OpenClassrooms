@@ -22,7 +22,7 @@ public class LoginController {
 	public LoginController(UserService userService) {
 		this.userService = userService;
 	}
-	
+	/*
 	@GetMapping("/")
 	//@RolesAllowed("USER")
 	public String home(Model model) {
@@ -47,5 +47,5 @@ public class LoginController {
 		
 		return "redirect:/addPerson";
 	}
-
+*/
 }
