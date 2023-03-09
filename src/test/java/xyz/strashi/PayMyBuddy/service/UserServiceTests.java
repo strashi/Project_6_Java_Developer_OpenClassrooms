@@ -2,7 +2,6 @@ package xyz.strashi.PayMyBuddy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +32,6 @@ public class UserServiceTests {
 		
 	}
 	
-	
 	@Test
 	public void createUserTest() {
 		List<BankAccount> bankAccounts = null;
@@ -43,7 +41,7 @@ public class UserServiceTests {
 		//User responseUser = userRepository.save(user);
 		User responseUser = userService.createUser(user);
 				
-		assertThat(responseUser.equals(user));
+		assertThat(responseUser.getEmail().equals(user.getEmail()));
 	}
 	
 	@Test
@@ -99,4 +97,50 @@ public class UserServiceTests {
 		assertThat(long3 == user3.getUserId());
 
 	}
+	
+	@Test
+	public void addBankAccountTest() {
+		List<BankAccount> bankAccounts = new ArrayList<>();
+		List<Relationship> relationships = new ArrayList<>();
+		User user = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+		userRepository.save(user);
+		BankAccount bankAccount = new BankAccount(0L,"FR552545658552","compte courant",100.0f);
+		
+		User response = userService.addBankAccount(user,bankAccount);
+		
+		assertThat(bankAccount.getIbanNumber().equals(response.getBankAccounts().get(0).getIbanNumber()));
+	}
+	
+	
+	@Test
+	public void getBankAccountsTest() {
+		List<BankAccount> bankAccounts = new ArrayList<>();
+		List<Relationship> relationships = new ArrayList<>();
+		BankAccount bankAccount = new BankAccount(0L,"FR552545658552","compte courant",100.0f);
+		BankAccount bankAccount2 = new BankAccount(0L,"FRxxxxxxxxx","compte courant",100.0f);
+
+		bankAccounts.add(bankAccount);
+		bankAccounts.add(bankAccount2);
+		User user = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+		user = userService.createUser(user);
+		
+		
+		List<BankAccount> response = userService.getBankAccounts(user);
+		System.out.println(bankAccount.getIbanNumber());
+		System.out.println(bankAccount2.getIbanNumber());
+		assertThat(bankAccount.getIbanNumber().equals(response.get(0).getIbanNumber()));
+		assertThat(bankAccount2.getIbanNumber().equals(response.get(1).getIbanNumber()));
+
+	}
+	
+	@Test
+	public void depositMoneyTest() {
+		User user = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, null, null);
+		user = userService.createUser(user);
+		user = userService.depositMoney(user, 100.0f);
+		
+		assertThat(user.getBalance() == 150);
+	}
+	
+	
 }

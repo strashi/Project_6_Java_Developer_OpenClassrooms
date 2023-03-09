@@ -12,7 +12,7 @@ public interface UserService {
 
 	public void loginUser(String email, String password);
 	
-	public void depositMoney(float amount);
+	public User depositMoney(User user, float amount);
 	
 	public List<User> getUsers();
 	
@@ -20,9 +20,9 @@ public interface UserService {
 	
 	public List<Relationship> getRelationships(User user);
 	
-	public BankAccount addBankAccount();
+	public User addBankAccount(User user,BankAccount bankAccount);
 	
-	public List<BankAccount> getBankAccounts();
+	public List<BankAccount> getBankAccounts(User user);
 	
 	
 }

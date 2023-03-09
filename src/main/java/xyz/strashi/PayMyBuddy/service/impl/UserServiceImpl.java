@@ -36,8 +36,11 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void depositMoney(float amount) {
-		// TODO Auto-generated method stub
+	public User depositMoney(User user, float amount) {
+		user = userRepository.findByEmail(user.getEmail());
+		float newAmount = user.getBalance() + amount;
+		user.setBalance(newAmount);
+		return userRepository.save(user);
 		
 	}
 
@@ -70,15 +73,19 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public BankAccount addBankAccount() {
-		// TODO Auto-generated method stub
-		return null;
+	public User addBankAccount(User user,BankAccount bankAccount) {
+		user = userRepository.findByEmail(user.getEmail());
+		user.getBankAccounts().add(bankAccount);
+		return userRepository.save(user);
 	}
 
 	@Override
-	public List<BankAccount> getBankAccounts() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BankAccount> getBankAccounts(User user) {
+		Optional<User> opt = userRepository.findById(user.getUserId());
+		User responseUser = opt.get();
+		
+		 List<BankAccount> bankAccountsList = responseUser.getBankAccounts();
+		return bankAccountsList;
 	}
 
 }
