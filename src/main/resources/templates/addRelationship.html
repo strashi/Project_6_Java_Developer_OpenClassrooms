@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <meta charset="UTF-8" />
+      <title>Add Person</title>
+      <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+   </head>
+   <body>
+   <h3><a th:href="@{/}">Home</a></h3>
+      <h1>Add relationship:</h1>
+       
+          <form th:action="@{/addRelationship}"
+         method="POST"> <!--  th:object="${createRelationshipDTO}" -->
+        Email user:
+         <input type="text" name="emailUser"  />    <!-- th:field="*{emailUser}" -->
+         <br/>
+         Email friend:
+         <input type="text" name="emailFriend" />   <!-- th:field="*{emailFriend}" --> 
+         <br/>
+        
+         <br/>
+         <input type="submit" value="Create" />
+      </form>
+    
+    
+      
+   </body>
+</html>

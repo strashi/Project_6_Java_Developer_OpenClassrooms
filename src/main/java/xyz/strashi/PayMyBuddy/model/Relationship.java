@@ -1,12 +1,13 @@
 package xyz.strashi.PayMyBuddy.model;
 
-import java.math.BigInteger;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -18,18 +19,21 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="relationship")
 public class Relationship {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long relationshipId;
 	
-	private Long userIdFriend;
+	@ManyToOne
+	private User friend;
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	LocalDateTime creationRelationshipDate;
+	Date creationRelationshipDate;
 	
-	public Relationship(Long userIdFriend,LocalDateTime creationRelationshipDate) {
-		this.userIdFriend = userIdFriend;
+	
+	public Relationship(User friend, Date creationRelationshipDate) {
+		this.friend = friend;
 		this.creationRelationshipDate = creationRelationshipDate; 
 	}
 }

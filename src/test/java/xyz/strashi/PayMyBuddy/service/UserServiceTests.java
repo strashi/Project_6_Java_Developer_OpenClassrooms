@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
 import xyz.strashi.PayMyBuddy.model.User;
+import xyz.strashi.PayMyBuddy.repository.BankAccountRepository;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
 
 @SpringBootTest
@@ -26,9 +27,13 @@ public class UserServiceTests {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private BankAccountRepository bankAccountRepository;
+	
 	@BeforeEach
 	public void delete() {
 		userRepository.deleteAll();
+		bankAccountRepository.deleteAll();
 		
 	}
 	
@@ -44,6 +49,7 @@ public class UserServiceTests {
 		assertThat(responseUser.getEmail().equals(user.getEmail()));
 	}
 	
+	
 	@Test
 	public void addRelationshipTest() {
 		List<BankAccount> bankAccounts = null;
@@ -51,24 +57,24 @@ public class UserServiceTests {
 		User user1 = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
 		User user2 = new User(0L,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
 		User user3 = new User(0L,"email3@xyz","password","firstName3","lastName3",50.0f, null, relationships);
-		user1 = userService.createUser(user1);
-		user2 = userService.createUser(user2);
-		user3 = userService.createUser(user3);
+		user1 = userRepository.save(user1);
+		user2 = userRepository.save(user2);
+		user3 = userRepository.save(user3);
 	
-		userService.addRelationship(user1, user2);
+		userService.addRelationship(user1.getEmail(), user2.getEmail());
 	
-		userService.addRelationship(user1, user3);
+		userService.addRelationship(user1.getEmail(), user3.getEmail());
 		
 		Optional<User> opt = userRepository.findById(user1.getUserId());
 		User responseUser = opt.get();
 		
 		List<Relationship> relationsList = responseUser.getFriends();
 		
-		Long long1 = relationsList.get(0).getUserIdFriend();
-		Long long2 = relationsList.get(1).getUserIdFriend();
+		User responseUser1 = relationsList.get(0).getFriend();
+		User responseUser2 = relationsList.get(1).getFriend();
 				
-		assertThat(long1 == user2.getUserId());
-		assertThat(long2 == user3.getUserId());
+		assertThat(responseUser1.equals(user2)) ;
+		assertThat(responseUser2.equals(user3)) ;
 		
 	}
 	
@@ -80,21 +86,22 @@ public class UserServiceTests {
 		User user1 = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
 		User user2 = new User(0L,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
 		User user3 = new User(0L,"email3@xyz","password","firstName3","lastName3",50.0f, null, relationships);
-		user1 = userService.createUser(user1);
-		user2 = userService.createUser(user2);
-		user3 = userService.createUser(user3);
+		user1 = userRepository.save(user1);
+		user2 = userRepository.save(user2);
+		user3 = userRepository.save(user3);
 	
-		userService.addRelationship(user1, user2);
+		userService.addRelationship(user1.getEmail(), user2.getEmail());
 	
-		userService.addRelationship(user1, user3);
+		userService.addRelationship(user1.getEmail(), user3.getEmail());
 		
 		List<Relationship> relationshipsList = userService.getRelationships(user1);
+				
 		
-		Long long2 = relationshipsList.get(0).getUserIdFriend();
-		Long long3 = relationshipsList.get(1).getUserIdFriend();
-		
-		assertThat(long2 == user2.getUserId());
-		assertThat(long3 == user3.getUserId());
+		User responseUser1 = relationshipsList.get(0).getFriend();
+		User responseUser2 = relationshipsList.get(1).getFriend();
+				
+		assertThat(responseUser1.equals(user2)) ;
+		assertThat(responseUser2.equals(user3)) ;
 
 	}
 	
@@ -104,7 +111,7 @@ public class UserServiceTests {
 		List<Relationship> relationships = new ArrayList<>();
 		User user = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
 		userRepository.save(user);
-		BankAccount bankAccount = new BankAccount(0L,"FR552545658552","compte courant",100.0f);
+		BankAccount bankAccount = new BankAccount(0L,"compte courant","FR552545658552");
 		
 		User response = userService.addBankAccount(user,bankAccount);
 		
@@ -116,18 +123,19 @@ public class UserServiceTests {
 	public void getBankAccountsTest() {
 		List<BankAccount> bankAccounts = new ArrayList<>();
 		List<Relationship> relationships = new ArrayList<>();
-		BankAccount bankAccount = new BankAccount(0L,"FR552545658552","compte courant",100.0f);
-		BankAccount bankAccount2 = new BankAccount(0L,"FRxxxxxxxxx","compte courant",100.0f);
+		BankAccount bankAccount = new BankAccount(0L,"compte courant","FR552545658552");
+		BankAccount bankAccount2 = new BankAccount(0L,"compte bancaire","FRXXXXXXXXXXX");
 
 		bankAccounts.add(bankAccount);
 		bankAccounts.add(bankAccount2);
 		User user = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
-		user = userService.createUser(user);
+		user = userRepository.save(user);
 		
 		
 		List<BankAccount> response = userService.getBankAccounts(user);
-		System.out.println(bankAccount.getIbanNumber());
-		System.out.println(bankAccount2.getIbanNumber());
+		//System.out.println(bankAccount.getIbanNumber());
+		//System.out.println(bankAccount2.getIbanNumber());
+		assertThat(response.size() == 2);
 		assertThat(bankAccount.getIbanNumber().equals(response.get(0).getIbanNumber()));
 		assertThat(bankAccount2.getIbanNumber().equals(response.get(1).getIbanNumber()));
 
@@ -136,7 +144,7 @@ public class UserServiceTests {
 	@Test
 	public void depositMoneyTest() {
 		User user = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, null, null);
-		user = userService.createUser(user);
+		user = userRepository.save(user);
 		user = userService.depositMoney(user, 100.0f);
 		
 		assertThat(user.getBalance() == 150);

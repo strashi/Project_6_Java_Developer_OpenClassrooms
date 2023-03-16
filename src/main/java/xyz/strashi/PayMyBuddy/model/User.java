@@ -1,5 +1,6 @@
 package xyz.strashi.PayMyBuddy.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="users")
+@Table(name="user")
 public class User {
 	
 	public User(String firstName, String lastName, float balance) {
@@ -37,6 +37,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="user_id")
 	private Long userId;
 	
 	@Column(unique = true)
@@ -56,13 +57,14 @@ public class User {
 			cascade = { 
 					CascadeType.PERSIST, 
 					CascadeType.MERGE 
-					}	
+					}
 			)
-	List<BankAccount> bankAccounts;
+	List<BankAccount> bankAccounts = new ArrayList<>();
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL , orphanRemoval = true)
-	List<Relationship> friends;
+	@JoinColumn(name="user_id")
+	List<Relationship> friends= new ArrayList<>();
 	
 	//,fetch = FetchType.LAZY
 

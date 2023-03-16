@@ -2,6 +2,7 @@ package xyz.strashi.PayMyBuddy.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name ="transactions")
+@Table(name ="transaction")
 public class Transaction {
 
 	@Id
@@ -32,12 +33,23 @@ public class Transaction {
 	private float amount;
 	private String description;
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Date date;
-	private Enum<Status> status;
+	private Date transactionDate;
+	private Status status;
+	@Column(name="bal_deb_before")
 	private float balanceDebitorBefore;
+	@Column(name="bal_deb_after")
 	private float balanceDebitorAfter;
+	@Column(name="bal_cred_before")
 	private float balanceCreditorBefore;
+	@Column(name="bal_cred_after")
 	private float balanceCreditorAfter;
+	
+	public Transaction(User debitor,User creditor, float amount, String description) {
+		this.debitor = debitor;
+		this.creditor = creditor;
+		this.amount = amount;
+		this.description = description;
+	}
 
 
 

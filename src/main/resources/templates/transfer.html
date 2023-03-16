@@ -1,40 +1,47 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8" />
-<title>Home</title>
-
-</head>
-<body>
-
+   <head>
+      <meta charset="UTF-8" />
+      <title>Transfer</title>
+     
+   </head>
+   <body>
+            
 	<nav>
-		<div>
-			<h3>Pay My Buddy</h3>
-		</div>
+		<div><h3>Pay My Buddy</h3></div>
 		<div>
 			<h3><a th:href="@{/}">Home</a></h3>
 			<h3><a th:href="@{/transfer}">Transfer</a></h3>
 			<h3><a th:href="@{/profile}">Profile</a></h3>
 			<h3><a th:href="@{/contact}">Contact</a></h3>
-			<h3><a th:href="@{/logoff}">Log off</a>	</h3>
-			<h3><a th:href="@{/createUser}">Create user</a>	</h3>
+			<h3><a th:href="@{/logoff}">Log off</a></h3>
 		</div>
 	</nav>
+	
 	<section>
-		<div>
-			<p>chemin</p>
-		</div>
+		<div><p>chemin</p></div>
+		
 		<section>
-			<h3>Balance</h3>
-									
-			<h4><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>
-		<!--	<h4><span th:text="${user.balance} "></span></h4> -->
+			<h3>Send Money</h3>
+			<h3><a th:href="@{/addRelationship}">Add Connection</a></h3>
 			
+			<h3>Balance</h3>
+			<h4><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>
+			
+			<form th:action="@{/transfer}"  method="POST"> <!-- th:object="${transaction}" -->
+				<p>
+					<select name="emailCreditor" id="connection" >
+						<option value="">Select A Connection</option>
+						<option th:each="friend: ${friends}" th:value="${friend.email}"
+							th:text="${friend.firstName}" > <!-- th:field="*{creditor}"    -->
+				</select>
+				<input type="number" name="amount" min="0"  /> <!--  th:field="*{amount}"   -->
+				<input type="submit" name="pay" value="Pay" />
+				</p>
+			</form>
 		</section>
 		<section>
-			<div>
-				<h3>My Transactions</h3>
-			</div>
+			<div><h3>My Transactions</h3></div>
 			<div>
 				<table>
 					<thead>
@@ -61,6 +68,6 @@
 		</section>
 
 	</section>
-</body>
-
+   </body>
+   
 </html>

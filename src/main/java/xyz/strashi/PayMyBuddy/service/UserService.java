@@ -16,13 +16,21 @@ public interface UserService {
 	
 	public List<User> getUsers();
 	
-	public User addRelationship(User user1, User user2);
+	public User addRelationship(String emailUser, String emailFriend);
 	
 	public List<Relationship> getRelationships(User user);
+	
+	public List<String> getRelationshipsFirstName(User user);
+	
+	public List<User> getRelationshipsUser(User user);
 	
 	public User addBankAccount(User user,BankAccount bankAccount);
 	
 	public List<BankAccount> getBankAccounts(User user);
+
+	public User getUser();
+
+	public User findByEmail(String email);
 	
 	
 }

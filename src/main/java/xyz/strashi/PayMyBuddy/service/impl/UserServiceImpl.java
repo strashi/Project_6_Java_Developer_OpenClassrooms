@@ -1,8 +1,11 @@
 package xyz.strashi.PayMyBuddy.service.impl;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,19 +52,21 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
-
+	
 	@Override
-	public User addRelationship(User user1, User user2) {
-		user1 = userRepository.findByEmail(user1.getEmail());
-		user2 = userRepository.findByEmail(user2.getEmail());
-		LocalDateTime creationDate = LocalDateTime.now();
-		Relationship rel = new Relationship(user2.getUserId(),creationDate);
+	public User addRelationship(String emailUser, String emailFriend) {
+		User user = userRepository.findByEmail(emailUser);
+		User friend = userRepository.findByEmail(emailFriend);
+		System.out.println("email user" +emailUser);
+		Date creationDate = new Date();
+		Relationship rel = new Relationship(friend,creationDate);
 		
-		user1.getFriends().add(rel);
+		user.getFriends().add(rel);
 		
-		return userRepository.save(user1);
+		return userRepository.save(user);
 	}
 
+	
 	@Override
 	public List<Relationship> getRelationships(User user) {
 
@@ -71,7 +76,26 @@ public class UserServiceImpl implements UserService{
 		List<Relationship> relationshipsList = responseUser.getFriends();
 		return relationshipsList ;
 	}
-
+	
+	@Override
+	public List<String> getRelationshipsFirstName(User user) {
+		List<Relationship>friendsList = this.getRelationships(user);
+		List<String> RelationshipFirstNameList = new ArrayList<>();
+		for(Relationship relationship : friendsList) {
+			RelationshipFirstNameList.add(relationship.getFriend().getFirstName());
+		}
+		return RelationshipFirstNameList;
+	}
+	
+	public List<User> getRelationshipsUser(User user) {
+		List<Relationship>friendsList = this.getRelationships(user);
+		List<User> RelationshipUserList = new ArrayList<>();
+		for(Relationship relationship : friendsList) {
+			RelationshipUserList.add(relationship.getFriend());
+		}
+		return RelationshipUserList;
+	}
+	
 	@Override
 	public User addBankAccount(User user,BankAccount bankAccount) {
 		user = userRepository.findByEmail(user.getEmail());
@@ -87,5 +111,19 @@ public class UserServiceImpl implements UserService{
 		 List<BankAccount> bankAccountsList = responseUser.getBankAccounts();
 		return bankAccountsList;
 	}
+
+	@Override
+	public User getUser() {
+		return userRepository.findByEmail("aaa");
+	
+	}
+
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	
+
+	
 
 }

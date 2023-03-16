@@ -2,22 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
    <head>
       <meta charset="UTF-8" />
-      <title>Add Person</title>
+      <title>Create user</title>
       <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
    </head>
    <body>
-      <h1>Create a Person:</h1>
+   		<h3><a th:href="@{/}">Home</a></h3>
+      <h1>Create user:</h1>
        
-          <form th:action="@{/addPerson}"
-         th:object="${user}" method="POST">
-         First Name:
-         <input type="text" th:field="*{firstName}" />    
+          <form th:action="@{/createUser}"
+          method="POST"> <!-- th:object="${user}"  -->
+         Email:
+         <input type="text" name="email" />    <!-- th:field="*{email}"  -->
          <br/>
-         Last Name:
-         <input type="text" th:field="*{lastName}" />     
+         Password:
+         <input type="text" name="password" />     <!-- th:field="*{password}" -->
+         <br/>
+         First Name:
+          <input type="text" name="firstName" />      <!--th:field="*{firstName}"  -->
+         <br/>
+           Last Name:
+         <input type="text" name="lastName" />      <!-- th:field="*{lastName}" -->
          <br/>
          Balance:
-          <input type="text" th:field="*{balance}" />     
+          <input type="number" name="balance" />   <!--th:field="*{balance}"  -->
          <br/>
          <input type="submit" value="Create" />
       </form>
