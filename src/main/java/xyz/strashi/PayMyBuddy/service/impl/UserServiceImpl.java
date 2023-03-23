@@ -29,14 +29,14 @@ public class UserServiceImpl implements UserService{
 		//User userSaved = userRepository.save(user);
 		return userRepository.save(user);
 	}
-
+	/*
 	@Override
 	public void loginUser(String email, String password) {
 		User user = userRepository.findByEmail(email);
 		if(password.equals(user.getPassword())) {
 			
 		}
-	}
+	}*/
 
 	@Override
 	public User depositMoney(User user, float amount) {
@@ -46,12 +46,12 @@ public class UserServiceImpl implements UserService{
 		return userRepository.save(user);
 		
 	}
-
+	/*
 	@Override
 	public List<User> getUsers() {
 		// TODO Auto-generated method stub
 		return userRepository.findAll();
-	}
+	}*/
 	
 	@Override
 	public User addRelationship(String emailUser, String emailFriend) {
@@ -74,9 +74,9 @@ public class UserServiceImpl implements UserService{
 		User responseUser = opt.get();
 		
 		List<Relationship> relationshipsList = responseUser.getFriends();
-		return relationshipsList ;
+		return relationshipsList;
 	}
-	
+	/*
 	@Override
 	public List<String> getRelationshipsFirstName(User user) {
 		List<Relationship>friendsList = this.getRelationships(user);
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService{
 			RelationshipFirstNameList.add(relationship.getFriend().getFirstName());
 		}
 		return RelationshipFirstNameList;
-	}
+	}*/
 	
 	public List<User> getRelationshipsUser(User user) {
 		List<Relationship>friendsList = this.getRelationships(user);
@@ -98,12 +98,11 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public User addBankAccount(User user,String accountDescription, String ibanNumber) {
-		//user = userRepository.findByEmail(user.getEmail());
 		BankAccount bankAccount = new BankAccount(accountDescription, ibanNumber);
 		user.getBankAccounts().add(bankAccount);
 		return userRepository.save(user);
 	}
-
+	
 	@Override
 	public List<BankAccount> getBankAccounts(User user) {
 		Optional<User> opt = userRepository.findById(user.getUserId());
@@ -112,12 +111,12 @@ public class UserServiceImpl implements UserService{
 		 List<BankAccount> bankAccountsList = responseUser.getBankAccounts();
 		return bankAccountsList;
 	}
-
+	/*
 	@Override
 	public User getUser() {
 		return userRepository.findByEmail("aaa");
 	
-	}
+	}*/
 
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);

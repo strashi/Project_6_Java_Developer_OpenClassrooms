@@ -16,13 +16,13 @@ import xyz.strashi.PayMyBuddy.service.TransactionService;
 import xyz.strashi.PayMyBuddy.service.UserService;
 
 @Controller
-public class UserController {
+public class HomeController {
 	
 	private UserService userService;
 	
 	private TransactionService transactionService; 
 	
-	public UserController(UserService userService, TransactionService transactionService) {
+	public HomeController(UserService userService, TransactionService transactionService) {
 		this.userService = userService;
 		this.transactionService = transactionService;
 	}
@@ -47,35 +47,7 @@ public class UserController {
 		
 		return "redirect:/";
 	}
-	
-	@GetMapping("/transfer")
-	public String transfer(Model model, Principal principal) {
-		User user = userService.findByEmail(principal.getName());
-		System.out.println(principal.getName());
-		//User user = userService.getUser();
-		model.addAttribute("user", user);
-		List<User> RelationshipsUserList = userService.getRelationshipsUser(user);
-		model.addAttribute("friends", RelationshipsUserList);
-		List<Transaction> transactionsList = transactionService.getTransactions(user);
-		model.addAttribute("transactionsList", transactionsList);
-	  	return "transfer";
-	}
-	
-	@PostMapping("/transfer")
-	public String transfer(Principal principal, String emailCreditor,  float amount, String description) {
-		System.out.println("le crediteur est :" +emailCreditor);
-		System.out.println("le montant est :" +amount);
-		User debitor = userService.findByEmail(principal.getName());
-		User creditor = userService.findByEmail(emailCreditor);
-		transactionService.executeTransaction(debitor, creditor, amount, description);
-		return "redirect:/transfer";
-	}
 		
-	@GetMapping("/profile")
-	public String profile() {
-			return "profile";
-	}
-	
 	@GetMapping("/contact")
 	public String contact() {
 			return "contact";
@@ -88,7 +60,6 @@ public class UserController {
 	
 	@GetMapping("/createUser")
 	public String createUser() {
-		//model.addAttribute("user", new User());
 		return "createUser";
 	}
 		
@@ -98,25 +69,12 @@ public class UserController {
 		userService.createUser(user);
 		return "redirect:/createUser";
 	}
-	
-	@GetMapping("/addRelationship")
-	public String addRelationship() {
-		//model.addAttribute("createRelationshipDTO", new CreateRelationshipDTO());
-		return "addRelationship";
-	}
-	
-	@PostMapping("/addRelationship" )
-	public String addRelationship(Principal principal, String emailFriend) {
-		String emailUser = principal.getName();
-		userService.addRelationship(emailUser,emailFriend);
-		return "redirect:/addRelationship";
-	}
-		
+	/*
 	@GetMapping("/getRelationships")
 	public String getRelationships(Model model, User user) {
 		userService.getRelationships(user);
 		return "getRelationships";
-	}
+	}*/
 	
 	@GetMapping("/addBankAccount")
 	public String addBankAccount() {
@@ -124,7 +82,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/addBankAccount" )
-	public String addRelationship(Principal principal, String accountDescription, String ibanNumber) {
+	public String addBanKAccount(Principal principal, String accountDescription, String ibanNumber) {
 		User user = userService.findByEmail(principal.getName());
 		userService.addBankAccount(user, accountDescription, ibanNumber);
 		return "redirect:/addBankAccount";

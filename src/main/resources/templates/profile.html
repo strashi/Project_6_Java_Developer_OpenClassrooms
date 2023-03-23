@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <meta charset="UTF-8" />
+      <title>Create user</title>
+      <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+   </head>
+   <body>
+   	
+   		<nav>
+		<div><h3>Pay My Buddy</h3></div>
+		<div>
+			<h3><a th:href="@{/}">Home</a></h3>
+			<h3><a th:href="@{/transfer}">Transfer</a></h3>
+			<h3><a th:href="@{/profile}">Profile</a></h3>
+			<h3><a th:href="@{/contact}">Contact</a></h3>
+			<h3><a th:href="@{/logoff}">Log off</a></h3>
+		</div>
+	</nav>
+	
+      <h1>Update user:</h1>
+       
+          <form th:action="@{/profile}" th:object="${user}"
+          method="POST"> <!--   -->
+         Email:
+         <input type="text" name="email" th:field="*{email}" />    <!-- th:field="*{email}"  -->
+         <br/>
+         Password:
+         <input type="text" name="password" th:field="*{password}"/>     <!-- th:field="*{password}" -->
+         <br/>
+         First Name:
+          <input type="text" name="firstName" th:field="*{firstName}"/>      <!--th:field="*{firstName}"  -->
+         <br/>
+           Last Name:
+         <input type="text" name="lastName" th:field="*{lastName}"/>      <!-- th:field="*{lastName}" -->
+         <br/>
+         <input type="submit" value="Update" />
+      </form>
+      <!--  
+         In Thymeleaf the equivalent of
+         JSP's ${pageContext.request.contextPath}/edit.html
+         would be @{/edit.html}         
+         -->
+         
+    
+      
+   </body>
+</html>

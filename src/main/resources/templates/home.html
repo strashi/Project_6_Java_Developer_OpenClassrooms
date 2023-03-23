@@ -3,27 +3,38 @@
 <head>
 <meta charset="UTF-8" />
 <title>Home</title>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
 
-	<nav>
-		<div>
-			<h3>Pay My Buddy</h3>
-		</div>
-		<div>
-			<h3><a th:href="@{/}">Home</a></h3>
-			<h3><a th:href="@{/transfer}">Transfer</a></h3>
-			<h3><a th:href="@{/profile}">Profile</a></h3>
-			<h3><a th:href="@{/contact}">Contact</a></h3>
-			<h3><a th:href="@{/logoff}">Log off</a>	</h3>
-			<h3><a th:href="@{/createUser}">Create user</a>	</h3>
-		</div>
-	</nav>
-	<section>
-		<div>
-			<p>chemin</p>
-		</div>
+	
+	
+	<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand btn btn-success" href="#">Pay My Buddy</a>
+    <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse nav justify-content-end" id="navbarNavAltMarkup">
+      <div class="navbar-nav ">
+        <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+        <a class="nav-link" th:href="@{/transfer}">Transfer</a>
+        <a class="nav-link" th:href="@{/profile}">Profile</a>
+        <a class="nav-link" th:href="@{/contact}">Contact</a>
+         <a class="nav-link" th:href="@{/logoff}">Log off</a>
+      </div>
+    </div>
+  </div>
+</nav>
+<h3><a th:href="@{/createUser}">Create user</a>	</h3>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb ms-3">
+    <li class="breadcrumb-item active" aria-current="page">Home</li>
+  </ol>
+</nav>
+
+	<section class="container-md">
+	
 		<section>
 			<h3>Balance</h3>
 									
@@ -47,31 +58,51 @@
 				<h3>My Transactions</h3>
 			</div>
 			<div>
-				<table>
-					<thead>
-						<tr>
-							<th>Connections</th>
-							<th>Description</th>
-							<th>Amount</th>
-						</tr>
-					</thead>
-					
-					<tbody>
-						<tr th:if="${transactionsList.empty}">
-							<td colspan="3">Aucune transaction</td>
-						</tr> 
-						<tr th:each="transaction : ${transactionsList}">
-							<td><span th:text="${transaction.creditor.getFirstName()}"></span></td>
-							<td><span th:text="${transaction.description}"></span></td>
-							<td><span th:text="${transaction.amount}"></span></td>
-							
-						</tr>
-					</tbody>
-				</table>
+				<div class="border border border-secondary">
+					<table class="table table-striped ">
+						<thead >
+							<tr class="table-success ">
+								<th class="nav justify-content-center">Connections</th>
+								<th >Description</th>
+								<th class="nav justify-content-center">Amount</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							<tr th:if="${transactionsList.empty}">
+								<td colspan="3">Aucune transaction</td>
+							</tr> 
+							<tr th:each="transaction : ${transactionsList}">
+								<td><span class="nav justify-content-center" th:text="${transaction.creditor.getFirstName()}"></span></td>
+								<td><span class="nav justify-content-center" th:text="${transaction.description}"></span></td>
+								<td><span class="nav justify-content-center" th:text="${transaction.amount}"></span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination nav justify-content-center">
+				    <li class="page-item">
+				      <a class="page-link" href="#" aria-label="Previous">
+				        <span aria-hidden="true">&laquo;</span>
+				      </a>
+				    </li>
+				    <li class="page-item"><a class="page-link" href="#">1</a></li>
+				    <li class="page-item"><a class="page-link" href="#">2</a></li>
+				    <li class="page-item"><a class="page-link" href="#">3</a></li>
+				    <li class="page-item">
+				      <a class="page-link" href="#" aria-label="Next">
+				        <span aria-hidden="true">&raquo;</span>
+				      </a>
+				    </li>
+				  </ul>
+				</nav>
 			</div>
 		</section>
 
 	</section>
+	 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 
 </html>

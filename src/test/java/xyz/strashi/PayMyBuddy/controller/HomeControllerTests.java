@@ -12,8 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import xyz.strashi.PayMyBuddy.service.UserService;
 
-@WebMvcTest(controllers = UserController.class)
-public class UserControllerTests {
+@WebMvcTest(controllers = HomeController.class)
+public class HomeControllerTests {
 	
 	@Autowired
 	private MockMvc mockMvc;
