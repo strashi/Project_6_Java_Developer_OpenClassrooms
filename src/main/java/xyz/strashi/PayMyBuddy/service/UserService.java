@@ -24,7 +24,7 @@ public interface UserService {
 	
 	public List<User> getRelationshipsUser(User user);
 	
-	public User addBankAccount(User user,BankAccount bankAccount);
+	public User addBankAccount(User user,String accountDescription, String ibanNumber);
 	
 	public List<BankAccount> getBankAccounts(User user);
 

@@ -17,6 +17,10 @@ import lombok.NoArgsConstructor;
 @Table(name="bank_account")
 public class BankAccount {
 	
+	public BankAccount(String accountDescription, String ibanNumber) {
+		this.accountDescription = accountDescription;
+		this.ibanNumber = ibanNumber;
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long bankAccountId;

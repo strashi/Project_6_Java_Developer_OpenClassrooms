@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User depositMoney(User user, float amount) {
-		user = userRepository.findByEmail(user.getEmail());
+		//user = userRepository.findByEmail(user.getEmail());
 		float newAmount = user.getBalance() + amount;
 		user.setBalance(newAmount);
 		return userRepository.save(user);
@@ -97,8 +97,9 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public User addBankAccount(User user,BankAccount bankAccount) {
-		user = userRepository.findByEmail(user.getEmail());
+	public User addBankAccount(User user,String accountDescription, String ibanNumber) {
+		//user = userRepository.findByEmail(user.getEmail());
+		BankAccount bankAccount = new BankAccount(accountDescription, ibanNumber);
 		user.getBankAccounts().add(bankAccount);
 		return userRepository.save(user);
 	}

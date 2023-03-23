@@ -1,5 +1,6 @@
 package xyz.strashi.PayMyBuddy.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -7,10 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import xyz.strashi.PayMyBuddy.dto.CreateRelationshipDTO;
+import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Transaction;
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.service.TransactionService;
@@ -29,17 +28,31 @@ public class UserController {
 	}
 	
 	@GetMapping("/")
-	public String home(Model model) {
-		User user = userService.getUser();
+	public String home(Model model, Principal principal) {
+		User user = userService.findByEmail(principal.getName());
 		model.addAttribute("user", user);
+		
 		List<Transaction> transactionsList = transactionService.getTransactions(user);
 		model.addAttribute("transactionsList", transactionsList);
+		
+		List<BankAccount> bankAccountsList= userService.getBankAccounts(user);
+		model.addAttribute("bankAccounts", bankAccountsList);
 		return "home";
 	}
+	
+	@PostMapping("/")
+	public String home(Principal principal, float amount) {
+		User user = userService.findByEmail(principal.getName());
+		userService.depositMoney(user, amount);
 		
+		return "redirect:/";
+	}
+	
 	@GetMapping("/transfer")
-	public String transfer(Model model) {
-		User user = userService.getUser();
+	public String transfer(Model model, Principal principal) {
+		User user = userService.findByEmail(principal.getName());
+		System.out.println(principal.getName());
+		//User user = userService.getUser();
 		model.addAttribute("user", user);
 		List<User> RelationshipsUserList = userService.getRelationshipsUser(user);
 		model.addAttribute("friends", RelationshipsUserList);
@@ -49,12 +62,12 @@ public class UserController {
 	}
 	
 	@PostMapping("/transfer")
-	public String transfer(String emailCreditor,  float amount) {
+	public String transfer(Principal principal, String emailCreditor,  float amount, String description) {
 		System.out.println("le crediteur est :" +emailCreditor);
 		System.out.println("le montant est :" +amount);
-		User debitor = userService.getUser();
+		User debitor = userService.findByEmail(principal.getName());
 		User creditor = userService.findByEmail(emailCreditor);
-		transactionService.executeTransaction(debitor, creditor, amount, null);
+		transactionService.executeTransaction(debitor, creditor, amount, description);
 		return "redirect:/transfer";
 	}
 		
@@ -93,8 +106,8 @@ public class UserController {
 	}
 	
 	@PostMapping("/addRelationship" )
-	public String addRelationship( String emailUser, String emailFriend) {
-		
+	public String addRelationship(Principal principal, String emailFriend) {
+		String emailUser = principal.getName();
 		userService.addRelationship(emailUser,emailFriend);
 		return "redirect:/addRelationship";
 	}
@@ -105,5 +118,16 @@ public class UserController {
 		return "getRelationships";
 	}
 	
+	@GetMapping("/addBankAccount")
+	public String addBankAccount() {
+		return "addBankAccount";
+	}
+	
+	@PostMapping("/addBankAccount" )
+	public String addRelationship(Principal principal, String accountDescription, String ibanNumber) {
+		User user = userService.findByEmail(principal.getName());
+		userService.addBankAccount(user, accountDescription, ibanNumber);
+		return "redirect:/addBankAccount";
+	}
 		
 }

@@ -29,15 +29,16 @@
 			<h4><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>
 			
 			<form th:action="@{/transfer}"  method="POST"> <!-- th:object="${transaction}" -->
-				<p>
+				
 					<select name="emailCreditor" id="connection" >
 						<option value="">Select A Connection</option>
 						<option th:each="friend: ${friends}" th:value="${friend.email}"
 							th:text="${friend.firstName}" > <!-- th:field="*{creditor}"    -->
 				</select>
+				<input type="text" name="description" />
 				<input type="number" name="amount" min="0"  /> <!--  th:field="*{amount}"   -->
 				<input type="submit" name="pay" value="Pay" />
-				</p>
+				
 			</form>
 		</section>
 		<section>

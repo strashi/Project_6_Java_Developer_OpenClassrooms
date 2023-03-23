@@ -9,18 +9,11 @@
    <h3><a th:href="@{/}">Home</a></h3>
       <h1>Add relationship:</h1>
        
-          <form th:action="@{/addRelationship}"
-         method="POST"> <!--  th:object="${createRelationshipDTO}" -->
-        Email user:
-         <input type="text" name="emailUser"  />    <!-- th:field="*{emailUser}" -->
-         <br/>
-         Email friend:
-         <input type="text" name="emailFriend" />   <!-- th:field="*{emailFriend}" --> 
-         <br/>
-        
-         <br/>
-         <input type="submit" value="Create" />
-      </form>
+		<form th:action="@{/addRelationship}" method="POST"> <!--  th:object="${createRelationshipDTO}" -->
+                Email friend:
+        	 <input type="text" name="emailFriend" />   <!-- th:field="*{emailFriend}" --> 
+             <input type="submit" value="Create" />
+      	</form>
     
     
       
