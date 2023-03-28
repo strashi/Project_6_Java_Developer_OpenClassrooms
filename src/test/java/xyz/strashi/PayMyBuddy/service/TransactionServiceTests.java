@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
+import xyz.strashi.PayMyBuddy.model.Role;
 import xyz.strashi.PayMyBuddy.model.Status;
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
@@ -38,8 +39,8 @@ public class TransactionServiceTests {
 	public void executeTransactionTest() {
 		List<BankAccount> bankAccounts = null;
 		List<Relationship> relationships = new ArrayList<>();
-		User user1 = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
-		User user2 = new User(0L,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
+		User user1 = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
+		User user2 = new User(0L,Role.USER,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
 		
 		user1 = userRepository.save(user1);
 		user2 = userRepository.save(user2);

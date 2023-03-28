@@ -3,6 +3,8 @@ package xyz.strashi.PayMyBuddy.controller;
 import java.security.Principal;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

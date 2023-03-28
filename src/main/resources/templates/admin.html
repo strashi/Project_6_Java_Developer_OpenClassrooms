@@ -21,7 +21,6 @@
         <a class="nav-link" th:href="@{/transfer}">Transfer</a>
         <a class="nav-link" th:href="@{/profile}">Profile</a>
         <a class="nav-link" th:href="@{/contact}">Contact</a>
-         <a class="nav-link" th:href="@{/admin}">Admin</a>
          <a class="nav-link" th:href="@{/login}">Log off</a>
       </div>
     </div>
@@ -37,6 +36,7 @@
 	<section class="container-md">
 	
 		<section>
+		<h3>Bonjour admin!</h3>
 			<h3>Balance</h3>
 									
 			<h4><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>

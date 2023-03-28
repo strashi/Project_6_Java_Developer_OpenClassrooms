@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
+import xyz.strashi.PayMyBuddy.model.Role;
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.repository.BankAccountRepository;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
@@ -41,7 +42,7 @@ public class UserServiceTests {
 	public void createUserTest() {
 		List<BankAccount> bankAccounts = null;
 		List<Relationship> relationships = null;
-		User user = new User(0L,"email@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+		User user = new User(0L, Role.USER,"email@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
 		
 		//User responseUser = userRepository.save(user);
 		User responseUser = userService.createUser(user);
@@ -54,9 +55,9 @@ public class UserServiceTests {
 	public void addRelationshipTest() {
 		List<BankAccount> bankAccounts = null;
 		List<Relationship> relationships = new ArrayList<>();
-		User user1 = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
-		User user2 = new User(0L,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
-		User user3 = new User(0L,"email3@xyz","password","firstName3","lastName3",50.0f, null, relationships);
+		User user1 = new User(0L, Role.USER,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
+		User user2 = new User(0L, Role.USER,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
+		User user3 = new User(0L,Role.USER,"email3@xyz","password","firstName3","lastName3",50.0f, null, relationships);
 		user1 = userRepository.save(user1);
 		user2 = userRepository.save(user2);
 		user3 = userRepository.save(user3);
@@ -83,9 +84,9 @@ public class UserServiceTests {
 		
 		List<BankAccount> bankAccounts = null;
 		List<Relationship> relationships = new ArrayList<>();
-		User user1 = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
-		User user2 = new User(0L,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
-		User user3 = new User(0L,"email3@xyz","password","firstName3","lastName3",50.0f, null, relationships);
+		User user1 = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
+		User user2 = new User(0L,Role.USER,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
+		User user3 = new User(0L,Role.USER,"email3@xyz","password","firstName3","lastName3",50.0f, null, relationships);
 		user1 = userRepository.save(user1);
 		user2 = userRepository.save(user2);
 		user3 = userRepository.save(user3);
@@ -128,7 +129,7 @@ public class UserServiceTests {
 
 		bankAccounts.add(bankAccount);
 		bankAccounts.add(bankAccount2);
-		User user = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+		User user = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
 		user = userRepository.save(user);
 		
 		

@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import xyz.strashi.PayMyBuddy.model.BankAccount;
@@ -26,7 +26,10 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public User createUser(User user) {
-		//User userSaved = userRepository.save(user);
+		 	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		 	String hashedPassword = passwordEncoder.encode(user.getPassword());
+	        user.setPassword(hashedPassword);
+		
 		return userRepository.save(user);
 	}
 	/*
@@ -55,8 +58,8 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public User addRelationship(String emailUser, String emailFriend) {
-		User user = userRepository.findByEmail(emailUser);
-		User friend = userRepository.findByEmail(emailFriend);
+		User user = userRepository.findByEmail(emailUser).orElseThrow(() -> new UsernameNotFoundException("User not present"));
+		User friend = userRepository.findByEmail(emailFriend).orElseThrow(() -> new UsernameNotFoundException("User not present"));
 		System.out.println("email user" +emailUser);
 		Date creationDate = new Date();
 		Relationship rel = new Relationship(friend,creationDate);
@@ -119,7 +122,7 @@ public class UserServiceImpl implements UserService{
 	}*/
 
 	public User findByEmail(String email) {
-		return userRepository.findByEmail(email);
+		return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not present"));
 	}
 
 	
