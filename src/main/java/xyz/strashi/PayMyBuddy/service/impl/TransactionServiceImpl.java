@@ -6,6 +6,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import xyz.strashi.PayMyBuddy.model.Status;
@@ -55,7 +57,8 @@ public class TransactionServiceImpl implements TransactionService{
 
 	@Override
 	public List<Transaction> getTransactions(User user) {
-		List<Transaction> transactionsList = transactionRepository.findByDebitor(user);
+		
+		List<Transaction> transactionsList = transactionRepository.getAllTransactions(user);
 		return transactionsList;
 	}
 

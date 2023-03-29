@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
 import xyz.strashi.PayMyBuddy.model.User;
+import xyz.strashi.PayMyBuddy.repository.BankAccountRepository;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
+import xyz.strashi.PayMyBuddy.service.TransactionService;
 import xyz.strashi.PayMyBuddy.service.UserService;
 
 @Service
@@ -23,6 +25,13 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private BankAccountRepository bankAccountRepository;
+	
+	@Autowired
+	private TransactionService transactionService;
+	
 	
 	@Override
 	public User createUser(User user) {
@@ -42,11 +51,19 @@ public class UserServiceImpl implements UserService{
 	}*/
 
 	@Override
-	public User depositMoney(User user, float amount) {
-		//user = userRepository.findByEmail(user.getEmail());
-		float newAmount = user.getBalance() + amount;
-		user.setBalance(newAmount);
-		return userRepository.save(user);
+	public void depositMoney(User user, String ibanNumber, float amount) {
+		
+		//float newAmount = user.getBalance() + amount;
+		//user.setBalance(newAmount);
+		//System.out.println("numero iban "+ibanNumber);
+		//Creation transaction
+		BankAccount bankAccount = bankAccountRepository.findByIbanNumber(ibanNumber);
+		String description = "Reload from "+bankAccount.getAccountDescription();
+		//System.out.println("description compte "+bankAccount.getAccountDescription());
+		User debitor = new User();
+		transactionService.executeTransaction(debitor, user, amount, description);
+			
+	
 		
 	}
 	/*
@@ -123,6 +140,16 @@ public class UserServiceImpl implements UserService{
 
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not present"));
+	}
+
+	@Override
+	public void bankDeposit(User user, String ibanNumber, float amount) {
+		BankAccount bankAccount = bankAccountRepository.findByIbanNumber(ibanNumber);
+		String description = "Deposit to "+bankAccount.getAccountDescription();
+		//System.out.println("description compte "+bankAccount.getAccountDescription());
+		User creditor = new User();
+		transactionService.executeTransaction(user, creditor, amount, description);
+		
 	}
 
 	

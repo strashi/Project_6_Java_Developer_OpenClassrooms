@@ -11,5 +11,6 @@ public interface TransactionService {
 	public Status executeTransaction(User debitor, User creditor, float amount, String description);
 
 	public List<Transaction> getTransactions(User user);
-		
+	
+			
 }

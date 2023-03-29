@@ -16,7 +16,7 @@ import xyz.strashi.PayMyBuddy.service.UserService;
 @Controller
 public class TransferController {
 	
-private UserService userService;
+	private UserService userService;
 	
 	private TransactionService transactionService; 
 	

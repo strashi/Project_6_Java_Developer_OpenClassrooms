@@ -6,4 +6,6 @@ import xyz.strashi.PayMyBuddy.model.BankAccount;
 
 public interface BankAccountRepository extends JpaRepository<BankAccount,Long>{
 
+	BankAccount findByIbanNumber(String ibanNumber);
+
 }

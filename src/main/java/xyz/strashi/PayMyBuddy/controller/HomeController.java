@@ -3,12 +3,11 @@ package xyz.strashi.PayMyBuddy.controller;
 import java.security.Principal;
 import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
-
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import xyz.strashi.PayMyBuddy.model.BankAccount;
@@ -34,6 +33,7 @@ public class HomeController {
 		User user = userService.findByEmail(principal.getName());
 		model.addAttribute("user", user);
 		
+		//List<Transaction> transactionsList = transactionService.getTransactions(user);
 		List<Transaction> transactionsList = transactionService.getTransactions(user);
 		model.addAttribute("transactionsList", transactionsList);
 		
@@ -43,9 +43,17 @@ public class HomeController {
 	}
 	
 	@PostMapping("/")
-	public String home(Principal principal, float amount) {
+	public String home(Principal principal, String bankAccount, float amount) {
 		User user = userService.findByEmail(principal.getName());
-		userService.depositMoney(user, amount);
+		userService.depositMoney(user, bankAccount, amount);
+		
+		return "redirect:/";
+	}
+	
+	@PostMapping("/bankDeposit")
+	public String bankDeposit(Principal principal, String bankAccount, float amount) {
+		User user = userService.findByEmail(principal.getName());
+		userService.bankDeposit(user, bankAccount, amount);
 		
 		return "redirect:/";
 	}

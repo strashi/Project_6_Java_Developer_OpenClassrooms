@@ -12,7 +12,7 @@ public interface UserService {
 
 	//public void loginUser(String email, String password);
 	
-	public User depositMoney(User user, float amount);
+	public void depositMoney(User user, String ibanNumber, float amount);
 	
 	//public List<User> getUsers();
 	
@@ -31,6 +31,8 @@ public interface UserService {
 	//public User getUser();
 
 	public User findByEmail(String email);
+
+	public void bankDeposit(User user, String bankAccount, float amount);
 	
 	
 }
