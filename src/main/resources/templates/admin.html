@@ -41,8 +41,8 @@
 									
 			<h4><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>
 			
-			<h3>Reload PayMyBuddy Account</h3>
-			<form th:action="@{/}" method="POST">
+			<h3>Deposit Money in your Bank Account</h3>
+			<form th:action="@{/bankDeposit}" method="POST">
 				<select name="bankAccount">
 					<option value="">Select A Bank Account</option>
 					<option th:each="bankAccount : ${bankAccounts}" th:value="${bankAccount.ibanNumber}"
@@ -50,7 +50,7 @@
 					
 				</select>
 				<input type="number" name="amount" min="0"  /> 
-				<input type="submit" name="reload" value="Reload!" />
+				<input type="submit" name="deposit" value="Deposit!" />
 			</form>
 				<h5><a th:href="@{/addBankAccount}">Add Bank Account</a>	</h5>
 		</section>

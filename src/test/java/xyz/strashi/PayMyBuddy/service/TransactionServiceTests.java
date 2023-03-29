@@ -45,7 +45,7 @@ public class TransactionServiceTests {
 		user1 = userRepository.save(user1);
 		user2 = userRepository.save(user2);
 		
-		Status status = transactionService.executeTransaction(user1, user2, 50, "resto");
+		Status status = transactionService.executeTransaction(user1, user2, 50, "resto",true);
 		
 		assertThat(status.equals(Status.ok));
 	}

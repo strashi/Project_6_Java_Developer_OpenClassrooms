@@ -44,7 +44,7 @@ public class TransferController {
 		System.out.println("le montant est :" +amount);
 		User debitor = userService.findByEmail(principal.getName());
 		User creditor = userService.findByEmail(emailCreditor);
-		transactionService.executeTransaction(debitor, creditor, amount, description);
+		transactionService.executeTransaction(debitor, creditor, amount, description,true);
 		return "redirect:/transfer";
 	}
 	
