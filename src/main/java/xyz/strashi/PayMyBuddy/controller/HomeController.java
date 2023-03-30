@@ -43,7 +43,7 @@ public class HomeController {
 	}
 	
 	@PostMapping("/")
-	public String home(Principal principal, String bankAccount, float amount) {
+	public String depositMoney(Principal principal, String bankAccount, float amount) {
 		User user = userService.findByEmail(principal.getName());
 		userService.depositMoney(user, bankAccount, amount);
 		
@@ -62,11 +62,11 @@ public class HomeController {
 	public String contact() {
 			return "contact";
 	}
-	
+	/*
 	@GetMapping("/logoff")
 	public String logoff() {
 			return "logoff";
-	}
+	}*/
 	
 	@GetMapping("/createUser")
 	public String createUser() {
@@ -77,7 +77,7 @@ public class HomeController {
 	public String createUser(User user) {
 		
 		userService.createUser(user);
-		return "redirect:/createUser";
+		return "redirect:/login";
 	}
 	/*
 	@GetMapping("/getRelationships")
@@ -95,7 +95,7 @@ public class HomeController {
 	public String addBanKAccount(Principal principal, String accountDescription, String ibanNumber) {
 		User user = userService.findByEmail(principal.getName());
 		userService.addBankAccount(user, accountDescription, ibanNumber);
-		return "redirect:/addBankAccount";
+		return "redirect:/";
 	}
 		
 }

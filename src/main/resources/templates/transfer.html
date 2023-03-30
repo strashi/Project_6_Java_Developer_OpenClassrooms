@@ -9,10 +9,8 @@
             
 	<nav class="navbar navbar-expand-lg bg-body-tertiary">
   		<div class="container-fluid">
-    		<a class="navbar-brand btn btn-success" href="#">Pay My Buddy</a>
-    		<button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      			<span class="navbar-toggler-icon"></span>
-    		</button>
+    	    <span class="d-flex p-2 justify-content-center"> <a class="d-flex p-2 justify-content-center btn btn-success " style="width: 120px;" href="#">Pay My Buddy</a></span>
+
     		<div class="collapse navbar-collapse nav justify-content-end" id="navbarNavAltMarkup">
     			<div class="navbar-nav ">
         			<a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
@@ -33,41 +31,48 @@
 	  </ol>
 	</nav>
 	
+	
 	<section class="container-md">
 		
 		
 		<section>
-			<h3>Send Money</h3>
-			<h3><a th:href="@{/addRelationship}">Add Connection</a></h3>
-			
-			<h3>Balance</h3>
-			<h4><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>
-			
-			<form th:action="@{/transfer}"  method="POST"> <!-- th:object="${transaction}" -->
+			<div class="d-flex flex-row mb-3 justify-content-between">
+				<h4 >Send Money</h4>
 				
-					<select name="emailCreditor" id="connection" >
-						<option value="">Select A Connection</option>
-						<option th:each="friend: ${friends}" th:value="${friend.email}"
-							th:text="${friend.firstName}" > <!-- th:field="*{creditor}"    -->
+				<h3><a class="btn btn-primary" th:href="@{/addRelationship}">Add Connection</a></h3>
+			
+				
+			</div>
+			
+			<div class="d-flex flex-row mb-3 justify-content-center border">
+				<h4 >Balance :</h4>
+				<h4><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>
+			</div>
+			
+			<form class="d-flex flex-row mb-3 justify-content-evenly p-3 mb-2 bg-light text-dark pt-4 pb-4" style="height: 100px;" th:action="@{/transfer}"  method="POST"> 
+				
+				<select name="emailCreditor" id="connection" >
+					<option value="">Select A Connection</option>
+					<option th:each="friend: ${friends}" th:value="${friend.email}"	th:text="${friend.firstName}" > 
 				</select>
-				<input type="text" name="description" />
-				<input type="number" name="amount" min="0"  /> <!--  th:field="*{amount}"   -->
-				<input type="submit" name="pay" value="Pay" />
+				<input type="text" placeholder="Description" name="description" />
+				<input type="number" placeholder="0 €" name="amount" min="0"  /> 
+				<input type="submit" name="pay" class="btn btn-success" style="width: 150px;"  value="Pay" />
 				
 			</form>
 		</section>
 		<section>
 			<div>
-				<h3>My Transactions</h3>
+				<h4>My Transactions</h4>
 			</div>
 			<div>
-				<div class="border border border-secondary">
+				<div class="border border-secondary">
 					<table class="table table-striped ">
 						<thead >
-							<tr class="table-success ">
-								<th class="nav justify-content-center">Connections</th>
-								<th >Description</th>
-								<th class="nav justify-content-center">Amount</th>
+							<tr class="table-success">
+								<th class="text-center">Connections</th>
+								<th class="text-center">Description</th>
+								<th class="text-center">Amount</th>
 							</tr>
 						</thead>
 						

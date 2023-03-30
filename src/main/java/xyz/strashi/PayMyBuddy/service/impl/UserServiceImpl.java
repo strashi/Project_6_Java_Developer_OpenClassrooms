@@ -41,43 +41,22 @@ public class UserServiceImpl implements UserService{
 		
 		return userRepository.save(user);
 	}
-	/*
-	@Override
-	public void loginUser(String email, String password) {
-		User user = userRepository.findByEmail(email);
-		if(password.equals(user.getPassword())) {
-			
-		}
-	}*/
-
+	
 	@Override
 	public void depositMoney(User user, String ibanNumber, float amount) {
-		
-		//float newAmount = user.getBalance() + amount;
-		//user.setBalance(newAmount);
-		//System.out.println("numero iban "+ibanNumber);
-		//Creation transaction
 		BankAccount bankAccount = bankAccountRepository.findByIbanNumber(ibanNumber);
 		String description = "Reload from "+bankAccount.getAccountDescription();
-		//System.out.println("description compte "+bankAccount.getAccountDescription());
 		User debitor = new User();
 		transactionService.executeTransaction(debitor, user, amount, description, false);
 			
 	
 		
 	}
-	/*
-	@Override
-	public List<User> getUsers() {
-		// TODO Auto-generated method stub
-		return userRepository.findAll();
-	}*/
-	
+		
 	@Override
 	public User addRelationship(String emailUser, String emailFriend) {
 		User user = userRepository.findByEmail(emailUser).orElseThrow(() -> new UsernameNotFoundException("User not present"));
 		User friend = userRepository.findByEmail(emailFriend).orElseThrow(() -> new UsernameNotFoundException("User not present"));
-		System.out.println("email user" +emailUser);
 		Date creationDate = new Date();
 		Relationship rel = new Relationship(friend,creationDate);
 		
@@ -96,17 +75,7 @@ public class UserServiceImpl implements UserService{
 		List<Relationship> relationshipsList = responseUser.getFriends();
 		return relationshipsList;
 	}
-	/*
-	@Override
-	public List<String> getRelationshipsFirstName(User user) {
-		List<Relationship>friendsList = this.getRelationships(user);
-		List<String> RelationshipFirstNameList = new ArrayList<>();
-		for(Relationship relationship : friendsList) {
-			RelationshipFirstNameList.add(relationship.getFriend().getFirstName());
-		}
-		return RelationshipFirstNameList;
-	}*/
-	
+		
 	public List<User> getRelationshipsUser(User user) {
 		List<Relationship>friendsList = this.getRelationships(user);
 		List<User> RelationshipUserList = new ArrayList<>();
@@ -131,12 +100,7 @@ public class UserServiceImpl implements UserService{
 		 List<BankAccount> bankAccountsList = responseUser.getBankAccounts();
 		return bankAccountsList;
 	}
-	/*
-	@Override
-	public User getUser() {
-		return userRepository.findByEmail("aaa");
 	
-	}*/
 
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not present"));
@@ -146,7 +110,6 @@ public class UserServiceImpl implements UserService{
 	public void bankDeposit(User user, String ibanNumber, float amount) {
 		BankAccount bankAccount = bankAccountRepository.findByIbanNumber(ibanNumber);
 		String description = "Deposit to "+bankAccount.getAccountDescription();
-		//System.out.println("description compte "+bankAccount.getAccountDescription());
 		User creditor = new User();
 		transactionService.executeTransaction(user, creditor, amount, description, false);
 		

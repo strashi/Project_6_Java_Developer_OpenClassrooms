@@ -9,10 +9,8 @@
 
 	<nav class="navbar navbar-expand-lg bg-body-tertiary">
   		<div class="container-fluid">
-    		<a class="navbar-brand btn btn-success" href="#">Pay My Buddy</a>
-    		<button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      			<span class="navbar-toggler-icon"></span>
-    		</button>
+    		 <span class="d-flex p-2 justify-content-center"> <a class="d-flex p-2 justify-content-center btn btn-success " style="width: 120px;" href="#">Pay My Buddy</a></span>
+
     		<div class="collapse navbar-collapse nav justify-content-end" id="navbarNavAltMarkup">
     			<div class="navbar-nav ">
         			<a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
@@ -26,7 +24,7 @@
   		</div>
 	</nav>
 
-	<h3><a th:href="@{/createUser}">Create user</a>	</h3>
+	
 	
 	<nav aria-label="breadcrumb">
 	  <ol class="breadcrumb ms-3">
@@ -34,38 +32,43 @@
 	  </ol>
 	</nav>
 
-	<section class="container-md">
+	<section class="container-md border mx-auto p-2 mt-5" style="width: 600px;">
 	
 		<section>
-			<h3>Balance</h3>
-									
-			<h4><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>
+			<div class="border" >
+				<h4 class="d-flex p-1 justify-content-center">Balance</h4>						
+				<h4 class="d-flex p-1 justify-content-center"><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>
+			</div>
 			
-			<h3>Reload PayMyBuddy Account</h3>
-			<form th:action="@{/}" method="POST">
-				<select name="bankAccount">
-					<option value="">Select A Bank Account</option>
-					<option th:each="bankAccount : ${bankAccounts}" th:value="${bankAccount.ibanNumber}"
-						th:text="${bankAccount.accountDescription}">
-					
-				</select>
-				<input type="number" name="amount" min="0"  /> 
-				<input type="submit" name="reload" value="Reload!" />
-			</form>
-				
-				
-			<h3>Deposit Money in your Bank Account</h3>
-			<form th:action="@{/bankDeposit}" method="POST">
-				<select name="bankAccount">
-					<option value="">Select A Bank Account</option>
-					<option th:each="bankAccount : ${bankAccounts}" th:value="${bankAccount.ibanNumber}"
-						th:text="${bankAccount.accountDescription}">
-					
-				</select>
-				<input type="number" name="amount" min="0"  /> 
-				<input type="submit" name="deposit" value="Deposit!" />
-			</form>
-			<h5><a th:href="@{/addBankAccount}">Add Bank Account</a>	</h5>
+			<div class="mt-5">
+				<h4>Reload PayMyBuddy Account</h4>
+				<form th:action="@{/}" method="POST">
+					<select name="bankAccount">
+						<option value="">Select A Bank Account</option>
+						<option th:each="bankAccount : ${bankAccounts}" th:value="${bankAccount.ibanNumber}"
+							th:text="${bankAccount.accountDescription}">
+						
+					</select>
+					<input type="number" name="amount" min="0"  /> 
+					<input type="submit" name="reload" class="btn btn-success" value="Reload!" />
+				</form>
+			</div>	
+			
+			<div class="mt-5">
+				<h4>Deposit Money in your Bank Account</h4>
+				<form th:action="@{/bankDeposit}" method="POST">
+					<select name="bankAccount">
+						<option value="">Select A Bank Account</option>
+						<option th:each="bankAccount : ${bankAccounts}" th:value="${bankAccount.ibanNumber}"
+							th:text="${bankAccount.accountDescription}">
+					</select>
+					<input type="number" name="amount" min="0"  /> 
+					<input type="submit" name="deposit" class="btn btn-success" value="Deposit!" />
+				</form>
+			</div>
+			<div class="mt-5">
+				<h6><a class="btn btn-primary" th:href="@{/addBankAccount}">Add Bank Account</a>	</h6>
+			</div>
 		</section>
 		
 

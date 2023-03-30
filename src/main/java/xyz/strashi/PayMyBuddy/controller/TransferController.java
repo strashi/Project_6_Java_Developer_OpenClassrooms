@@ -28,8 +28,6 @@ public class TransferController {
 	@GetMapping("/transfer")
 	public String transfer(Model model, Principal principal) {
 		User user = userService.findByEmail(principal.getName());
-		System.out.println(principal.getName());
-		//User user = userService.getUser();
 		model.addAttribute("user", user);
 		List<User> RelationshipsUserList = userService.getRelationshipsUser(user);
 		model.addAttribute("friends", RelationshipsUserList);
@@ -40,8 +38,6 @@ public class TransferController {
 	
 	@PostMapping("/transfer")
 	public String transfer(Principal principal, String emailCreditor,  float amount, String description) {
-		System.out.println("le crediteur est :" +emailCreditor);
-		System.out.println("le montant est :" +amount);
 		User debitor = userService.findByEmail(principal.getName());
 		User creditor = userService.findByEmail(emailCreditor);
 		transactionService.executeTransaction(debitor, creditor, amount, description,true);
@@ -57,6 +53,6 @@ public class TransferController {
 	public String addRelationship(Principal principal, String emailFriend) {
 		String emailUser = principal.getName();
 		userService.addRelationship(emailUser,emailFriend);
-		return "redirect:/addRelationship";
+		return "redirect:/transfer";
 	}
 }

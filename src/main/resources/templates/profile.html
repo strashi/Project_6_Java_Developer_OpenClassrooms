@@ -9,10 +9,8 @@
    	
    		<nav class="navbar navbar-expand-lg bg-body-tertiary">
 	  		<div class="container-fluid">
-	    		<a class="navbar-brand btn btn-success" href="#">Pay My Buddy</a>
-	    		<button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-	      			<span class="navbar-toggler-icon"></span>
-	    		</button>
+	    		 <span class="d-flex p-2 justify-content-center"> <a class="d-flex p-2 justify-content-center btn btn-success " style="width: 120px;" href="#">Pay My Buddy</a></span>
+
 	    		<div class="collapse navbar-collapse nav justify-content-end" id="navbarNavAltMarkup">
 	    			<div class="navbar-nav ">
 	        			<a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
@@ -32,29 +30,31 @@
 	    <li class="breadcrumb-item active" aria-current="page">Profile</li>
 	  </ol>
 	</nav>
+	   <div class="border mx-auto p-2 mt-5" style="width: 300px;">
 	
-    	  <h1>Update user:</h1>
+      <h6 class="d-flex p-2 justify-content-center">Update user:</h6>
        
           <form th:action="@{/profile}" th:object="${user}" method="POST"> <!--   -->
         	 Email:
-	         <input type="text" name="email" th:field="*{email}" />    <!-- th:field="*{email}"  -->
-	         <br/>
+	         <div class="d-flex p-2 justify-content-center" > <input type="text" name="email" th:field="*{email}" /> </div>   <!-- th:field="*{email}"  -->
+	    
 	         Password:
-	         <input type="text" name="password" th:field="*{password}"/>     <!-- th:field="*{password}" -->
-	         <br/>
+	          <div class="d-flex p-2 justify-content-center" ><input type="text" name="password" th:field="*{password}"/> </div>    <!-- th:field="*{password}" -->
+	   
 	         First Name:
-	          <input type="text" name="firstName" th:field="*{firstName}"/>      <!--th:field="*{firstName}"  -->
-	         <br/>
+	           <div class="d-flex p-2 justify-content-center" ><input type="text" name="firstName" th:field="*{firstName}"/>  </div>    <!--th:field="*{firstName}"  -->
+	    
 	           Last Name:
-	         <input type="text" name="lastName" th:field="*{lastName}"/>      <!-- th:field="*{lastName}" -->
-	         <br/>
-	         <input type="submit" value="Update" />
+	          <div class="d-flex p-2 justify-content-center" ><input type="text" name="lastName" th:field="*{lastName}"/>  </div>    <!-- th:field="*{lastName}" -->
+	        
+	          <div class="d-flex p-2 justify-content-center" ><input class="btn btn-primary" type="submit" value="Update" /></div>
      	 </form>
       <!--  
          In Thymeleaf the equivalent of
          JSP's ${pageContext.request.contextPath}/edit.html
          would be @{/edit.html}         
          -->
+         </div>
          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
       </body>
 </html>
