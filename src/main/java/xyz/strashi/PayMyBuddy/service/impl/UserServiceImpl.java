@@ -43,13 +43,12 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public void depositMoney(User user, String ibanNumber, float amount) {
+	public void depositMoney(User user, String ibanNumber, double amount) {
 		BankAccount bankAccount = bankAccountRepository.findByIbanNumber(ibanNumber);
 		String description = "Reload from "+bankAccount.getAccountDescription();
-		User debitor = new User();
-		transactionService.executeTransaction(debitor, user, amount, description, false);
-			
-	
+		User admin = userRepository.findByEmail("admin@paymybuddy.com").orElseThrow(() -> new UsernameNotFoundException("User not present"));
+
+		transactionService.executeTransaction(admin, user, amount, description, false);
 		
 	}
 		
@@ -107,11 +106,12 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void bankDeposit(User user, String ibanNumber, float amount) {
+	public void bankDeposit(User user, String ibanNumber, double amount) {
 		BankAccount bankAccount = bankAccountRepository.findByIbanNumber(ibanNumber);
 		String description = "Deposit to "+bankAccount.getAccountDescription();
-		User creditor = new User();
-		transactionService.executeTransaction(user, creditor, amount, description, false);
+		User admin = userRepository.findByEmail("admin@paymybuddy.com").orElseThrow(() -> new UsernameNotFoundException("User not present"));
+
+		transactionService.executeTransaction(user, admin, amount, description, false);
 		
 	}
 

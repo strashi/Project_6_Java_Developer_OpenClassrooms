@@ -105,19 +105,21 @@ public class UserServiceTests {
 		assertThat(responseUser2.equals(user3)) ;
 
 	}
-	/*
+	
 	@Test
 	public void addBankAccountTest() {
 		List<BankAccount> bankAccounts = new ArrayList<>();
 		List<Relationship> relationships = new ArrayList<>();
-		User user = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+		User user = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
 		userRepository.save(user);
-		BankAccount bankAccount = new BankAccount(0L,"compte courant","FR552545658552");
+		String description = "compte courant";
+		String ibanNumber = "FR552545658552";
+		//BankAccount bankAccount = new BankAccount(0L,description,ibanNumber);
 		
-		User response = userService.addBankAccount(user,bankAccount);
+		User response = userService.addBankAccount(user,description, ibanNumber);
 		
-		assertThat(bankAccount.getIbanNumber().equals(response.getBankAccounts().get(0).getIbanNumber()));
-	}*/
+		assertThat(ibanNumber.equals(response.getBankAccounts().get(0).getIbanNumber()));
+	}
 	
 	
 	@Test
@@ -149,7 +151,7 @@ public class UserServiceTests {
 		user = userService.depositMoney(user, 100.0f);
 		
 		assertThat(user.getBalance() == 150);
-	}
-	*/
+	}*/
+	
 	
 }

@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "config.system.admin.email",
+    "type": "java.lang.String",
+    "description": "A description for 'config.system.admin.email'"
+  },
+  {
+    "name": "config.system.admin.email",
+    "type": "java.lang.String",
+    "description": "A description for 'config.system.admin.email'"
+  },
+  {
+    "name": "config.system.admin.email",
+    "type": "java.lang.String",
+    "description": "A description for 'config.system.admin.email'"
+  }
+]}

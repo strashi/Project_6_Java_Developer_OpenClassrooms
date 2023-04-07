@@ -30,19 +30,20 @@ public class Transaction {
 	private User debitor;
 	@ManyToOne
 	private User creditor;
-	private float amount;
+	private double amount;
 	private String description;
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date transactionDate;
-	private Status status;
+	
+	private String status;
 	@Column(name="bal_deb_before")
-	private float balanceDebitorBefore;
+	private double balanceDebitorBefore;
 	@Column(name="bal_deb_after")
-	private float balanceDebitorAfter;
+	private double balanceDebitorAfter;
 	@Column(name="bal_cred_before")
-	private float balanceCreditorBefore;
+	private double balanceCreditorBefore;
 	@Column(name="bal_cred_after")
-	private float balanceCreditorAfter;
+	private double balanceCreditorAfter;
 	
 	public Transaction(User debitor,User creditor, float amount, String description) {
 		this.debitor = debitor;

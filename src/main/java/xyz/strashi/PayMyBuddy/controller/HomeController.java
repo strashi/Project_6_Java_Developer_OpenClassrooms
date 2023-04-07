@@ -3,8 +3,6 @@ package xyz.strashi.PayMyBuddy.controller;
 import java.security.Principal;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,12 +60,7 @@ public class HomeController {
 	public String contact() {
 			return "contact";
 	}
-	/*
-	@GetMapping("/logoff")
-	public String logoff() {
-			return "logoff";
-	}*/
-	
+		
 	@GetMapping("/createUser")
 	public String createUser() {
 		return "createUser";
@@ -79,13 +72,7 @@ public class HomeController {
 		userService.createUser(user);
 		return "redirect:/login";
 	}
-	/*
-	@GetMapping("/getRelationships")
-	public String getRelationships(Model model, User user) {
-		userService.getRelationships(user);
-		return "getRelationships";
-	}*/
-	
+		
 	@GetMapping("/addBankAccount")
 	public String addBankAccount() {
 		return "addBankAccount";

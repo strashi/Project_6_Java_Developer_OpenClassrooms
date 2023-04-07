@@ -10,17 +10,11 @@ public interface UserService {
 	
 	public User createUser(User user);
 
-	//public void loginUser(String email, String password);
-	
-	public void depositMoney(User user, String ibanNumber, float amount);
-	
-	//public List<User> getUsers();
+	public void depositMoney(User user, String ibanNumber, double amount);
 	
 	public User addRelationship(String emailUser, String emailFriend);
 	
 	public List<Relationship> getRelationships(User user);
-	
-	//public List<String> getRelationshipsFirstName(User user);
 	
 	public List<User> getRelationshipsUser(User user);
 	
@@ -28,11 +22,9 @@ public interface UserService {
 	
 	public List<BankAccount> getBankAccounts(User user);
 
-	//public User getUser();
-
 	public User findByEmail(String email);
 
-	public void bankDeposit(User user, String bankAccount, float amount);
+	public void bankDeposit(User user, String bankAccount, double amount);
 	
 	
 }

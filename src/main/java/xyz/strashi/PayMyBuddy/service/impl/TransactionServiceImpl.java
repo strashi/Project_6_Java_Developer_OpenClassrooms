@@ -1,16 +1,19 @@
 package xyz.strashi.PayMyBuddy.service.impl;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
+import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import xyz.strashi.PayMyBuddy.model.Role;
 import xyz.strashi.PayMyBuddy.model.Status;
 import xyz.strashi.PayMyBuddy.model.Transaction;
 import xyz.strashi.PayMyBuddy.model.User;
@@ -19,76 +22,112 @@ import xyz.strashi.PayMyBuddy.repository.UserRepository;
 import xyz.strashi.PayMyBuddy.service.TransactionService;
 
 @Service
-public class TransactionServiceImpl implements TransactionService{
-	
+//@Configuration
+//@PropertySource(value = { "classpath:application.properties" })
+public class TransactionServiceImpl implements TransactionService {
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private TransactionRepository transactionRepository;
-	
+
+	/*
+	 * @Value("${config.system.admin.email:admin@paymybuddy.com}") private String
+	 * emailAdmin;
+	 * 
+	 * @Value("${config.system.admin.name}") private String nameAdmin;
+	 */
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private static DecimalFormat df2 = new DecimalFormat("#.##");
+
+	@PostConstruct
+	private void initAdminSystem() {
+		String hashedPassword = passwordEncoder.encode("admin");
+		User adminSystem = new User(1L, Role.ADMIN, "admin@paymybuddy.com", hashedPassword, "admin", "System", 50000,
+				null, null);
+
+		if (!userRepository.findByEmail("admin@paymybuddy.com").isPresent()) {
+			userRepository.save(adminSystem);
+		}
+
+	}
+	/*
+	 * @Bean public static PropertySourcesPlaceholderConfigurer
+	 * propertyConfigInDev() { return new PropertySourcesPlaceholderConfigurer(); }
+	 */
+
 	@Transactional
 	@Override
-	public Status executeTransaction(User debitor, User creditor, float amount, String description, boolean getTax) {
+	public String executeTransaction(User debitor, User creditor, double amount, String description, boolean getTax) {
 		Transaction transaction = null;
 		try {
-			
-			float balanceDebitorBefore = debitor.getBalance();
-			float balanceCreditorBefore = creditor.getBalance();
-			float balanceDebitorAfter = balanceDebitorBefore - amount;
-			float balanceCreditorAfter = balanceCreditorBefore + amount;
+			amount = Precision.round(amount, 2);
+			double balanceDebitorBefore = Precision.round(debitor.getBalance(), 2);
+			double balanceCreditorBefore = Precision.round(creditor.getBalance(), 2);
+			double balanceDebitorAfter = Precision.round(balanceDebitorBefore - amount, 2);
+			double balanceCreditorAfter = Precision.round(balanceCreditorBefore + amount, 2);
 			Date transactionDate = new Date();
-			transaction = new Transaction(0L,debitor,creditor, amount, description,transactionDate,Status.failed, balanceDebitorBefore,
-					balanceDebitorAfter,balanceCreditorBefore,balanceCreditorAfter);
-		
+			transaction = new Transaction(0L, debitor, creditor, amount, description, transactionDate,
+					Status.failed.toString(), balanceDebitorBefore, balanceDebitorAfter, balanceCreditorBefore,
+					balanceCreditorAfter);
+
 			debitor.setBalance(balanceDebitorAfter);
 			creditor.setBalance(balanceCreditorAfter);
 			userRepository.save(debitor);
 			userRepository.save(creditor);
-			transaction.setStatus(Status.ok);
+			if (getTax)
+				getTax(debitor, amount);
+			transaction.setStatus(Status.ok.toString());
 			transactionRepository.save(transaction);
-			if(getTax)
-				getTax(debitor,amount);
-			return Status.ok;
-		}catch(Exception e) {
+
+			return Status.ok.toString();
+		} catch (Exception e) {
+			transaction.setStatus(Status.failed.toString());
 			transactionRepository.save(transaction);
-			return Status.failed;
+			return Status.failed.toString();
 		}
-		
+
 	}
 
 	@Override
 	public List<Transaction> getTransactions(User user) {
-		
+
 		List<Transaction> transactionsList = transactionRepository.getAllTransactions(user);
 		return transactionsList;
 	}
-	
-	public Status getTax(User debitor, float amount) {
-		User admin = userRepository.findByEmail("admin").orElseThrow(() -> new UsernameNotFoundException("User not present"));
-		float fee = amount * 0.5f/100;
+
+	@Override
+	public String getTax(User debitor, double amount) {
+		User admin = userRepository.findByEmail("admin@paymybuddy.com")
+				.orElseThrow(() -> new UsernameNotFoundException("User not present"));
+		double fee = Precision.round(amount * 0.5f / 100, 2);
 		Transaction transaction = null;
-	try {
-			
-			float balanceDebitorBefore = debitor.getBalance();
-			float balanceCreditorBefore = admin.getBalance();
-			float balanceDebitorAfter = balanceDebitorBefore - fee;
-			float balanceCreditorAfter = balanceCreditorBefore + fee;
+		try {
+			double balanceDebitorBefore = Precision.round(debitor.getBalance(), 2);
+			double balanceCreditorBefore = Precision.round(admin.getBalance(), 2);
+			double balanceDebitorAfter = Precision.round(balanceDebitorBefore - fee, 2);
+			double balanceCreditorAfter = Precision.round(balanceCreditorBefore + fee, 2);
+
 			Date transactionDate = new Date();
-			transaction = new Transaction(0L,debitor, admin, fee, "Monetize Application",transactionDate,Status.failed, balanceDebitorBefore,
-					balanceDebitorAfter,balanceCreditorBefore,balanceCreditorAfter);
-		
+			transaction = new Transaction(0L, debitor, admin, fee, "Monetize Application", transactionDate,
+					Status.failed.toString(), balanceDebitorBefore, balanceDebitorAfter, balanceCreditorBefore,
+					balanceCreditorAfter);
+
 			debitor.setBalance(balanceDebitorAfter);
 			admin.setBalance(balanceCreditorAfter);
 			userRepository.save(debitor);
 			userRepository.save(admin);
-			transaction.setStatus(Status.ok);
+			transaction.setStatus(Status.ok.toString());
 			transactionRepository.save(transaction);
-		
-			return Status.ok;
-		}catch(Exception e) {
+
+			return Status.ok.toString();
+		} catch (Exception e) {
 			transactionRepository.save(transaction);
-			return Status.failed;
+			return Status.failed.toString();
 		}
 	}
 }

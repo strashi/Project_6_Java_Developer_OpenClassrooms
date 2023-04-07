@@ -20,17 +20,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private UserDetailService userDetailsService;
-	/*
-	@Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception{
-		auth.inMemoryAuthentication()
-		.withUser("aaa").password(passwordEncoder().encode("aaa")).roles("USER");
-	}*/
-	
+		
 	@Override
 	public void configure(HttpSecurity http) throws Exception{
 		http.authorizeRequests()
-		.antMatchers("/user").hasAuthority("USER")
+		.antMatchers("/").hasAnyAuthority("USER","ADMIN")
 		.antMatchers("/admin").hasAuthority("ADMIN")
 		.antMatchers("/createUser").permitAll()
 		.anyRequest().authenticated()
@@ -41,15 +35,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	      .and()
 	    .logout()
 	      .permitAll(); 
-		;
+		
 	}
-	/*
-	@Bean
-	public UserDetailsService userDetailsService() {
-		return new UserDetailsServiceImpl();
-	}
-	*/
-	
+		
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

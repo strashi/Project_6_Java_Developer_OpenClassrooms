@@ -54,7 +54,7 @@ public class User  {
 	@Column(name="last_name")
 	private String lastName;
 	
-	private float balance;
+	private double balance;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(
