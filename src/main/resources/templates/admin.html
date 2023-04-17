@@ -37,7 +37,7 @@
 		<h3>Bonjour admin!</h3>
 			<h3>Balance</h3>
 									
-			<h4><span th:text="${user} ? ${user.balance} : 'No account' "></span></h4>
+			<h4><span th:text="${userDTO} ? ${userDTO.balance} : 'No account' "></span></h4>
 			
 			<h3>Deposit Money in your Bank Account</h3>
 			<form th:action="@{/bankDeposit}" method="POST">
@@ -68,13 +68,13 @@
 						</thead>
 						
 						<tbody>
-							<tr th:if="${transactionsList.empty}">
+							<tr th:if="${transactionDTOsList.empty}">
 								<td colspan="3">Aucune transaction</td>
 							</tr> 
-							<tr th:each="transaction : ${transactionsList}">
-								<td><span class="nav justify-content-center" th:text="${transaction.creditor.getFirstName()}"></span></td>
-								<td><span class="nav justify-content-center" th:text="${transaction.description}"></span></td>
-								<td><span class="nav justify-content-center" th:text="${transaction.amount}"></span></td>
+							<tr th:each="transactionDTO : ${transactionDTOsList}">
+								<td><span class="nav justify-content-center" th:text="${transactionDTO.creditor.getFirstName()}"></span></td>
+								<td><span class="nav justify-content-center" th:text="${transactionDTO.description}"></span></td>
+								<td><span class="nav justify-content-center" th:text="${transactionDTO.amount}"></span></td>
 							</tr>
 						</tbody>
 					</table>

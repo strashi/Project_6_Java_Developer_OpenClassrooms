@@ -2,6 +2,8 @@ package xyz.strashi.PayMyBuddy.controller;
 
 import java.security.Principal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,9 @@ import xyz.strashi.PayMyBuddy.service.UserService;
 @Controller
 public class ProfileController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
+
+	
 	private UserService userService;
 	
 	public ProfileController(UserService userService) {
@@ -21,15 +26,30 @@ public class ProfileController {
 	
 	@GetMapping("/profile")
 	public String profile(Model model, Principal principal) {
-		User user = userService.findByEmail(principal.getName());
-		model.addAttribute("user", user);
+		logger.debug("GetMapping /profile sollicité de ProfileController");
+		try {
+			User user = userService.findByEmail(principal.getName());
+			model.addAttribute("user", user);
+			logger.info("GetMapping /profile réussi de ProfileController");
 			return "profile";
+		}catch (Exception e) {
+			logger.error("Erreur au GetMapping /profile du ProfileController", e);
+			return null;
+		}
+		
 	}
 	
 	@PostMapping("/profile")
 	public String update(User user) {
+		logger.debug("PostMapping /profile sollicité de ProfileController");
+		try {
 		
-		userService.createUser(user);
-		return "redirect:/";
+			userService.createUser(user);
+			logger.info("PostMapping /profile réussi de ProfileController");
+			return "redirect:/";
+		}catch (Exception e) {
+			logger.error("Erreur au PostMapping /profile du ProfileController", e);
+			return null;
+		}
 	}
 }

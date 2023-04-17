@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,6 @@ import xyz.strashi.PayMyBuddy.repository.UserRepository;
 import xyz.strashi.PayMyBuddy.service.TransactionService;
 
 @Service
-//@Configuration
-//@PropertySource(value = { "classpath:application.properties" })
 public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
@@ -32,33 +31,12 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	private TransactionRepository transactionRepository;
 
-	/*
-	 * @Value("${config.system.admin.email:admin@paymybuddy.com}") private String
-	 * emailAdmin;
-	 * 
-	 * @Value("${config.system.admin.name}") private String nameAdmin;
-	 */
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
+	
+	 @Value("${config.system.admin.email}")
+	 private String emailAdmin;
+	
 	@Autowired
 	private static DecimalFormat df2 = new DecimalFormat("#.##");
-
-	@PostConstruct
-	private void initAdminSystem() {
-		String hashedPassword = passwordEncoder.encode("admin");
-		User adminSystem = new User(1L, Role.ADMIN, "admin@paymybuddy.com", hashedPassword, "admin", "System", 50000,
-				null, null);
-
-		if (!userRepository.findByEmail("admin@paymybuddy.com").isPresent()) {
-			userRepository.save(adminSystem);
-		}
-
-	}
-	/*
-	 * @Bean public static PropertySourcesPlaceholderConfigurer
-	 * propertyConfigInDev() { return new PropertySourcesPlaceholderConfigurer(); }
-	 */
 
 	@Transactional
 	@Override
@@ -102,7 +80,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public String getTax(User debitor, double amount) {
-		User admin = userRepository.findByEmail("admin@paymybuddy.com")
+		User admin = userRepository.findByEmail(emailAdmin)
 				.orElseThrow(() -> new UsernameNotFoundException("User not present"));
 		double fee = Precision.round(amount * 0.5f / 100, 2);
 		Transaction transaction = null;

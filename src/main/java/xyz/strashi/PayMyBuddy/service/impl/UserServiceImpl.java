@@ -5,14 +5,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import org.hibernate.annotations.DynamicUpdate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import xyz.strashi.PayMyBuddy.controller.LoginController;
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
+import xyz.strashi.PayMyBuddy.model.Role;
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.repository.BankAccountRepository;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
@@ -23,6 +30,9 @@ import xyz.strashi.PayMyBuddy.service.UserService;
 @DynamicUpdate
 public class UserServiceImpl implements UserService{
 	
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -32,13 +42,69 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private TransactionService transactionService;
 	
+	@Autowired
+	private Utility utility;
+	
+	@Value("${config.system.admin.email}")
+	private String emailAdmin;
+	
+	@Value("${config.system.admin.firstName}") 
+	private String firstNameAdmin;
+	 
+	@Value("${config.system.admin.lastName}")
+	private String lastNameAdmin;
+	
+	@Value("${config.system.admin.balance}") 
+	private double balanceAdmin;
+	 
+	@Value("${config.system.admin.password}")
+	private String passwordAdmin;
+	
+	@Value("${config.system.admin.role}") 
+	private Role roleAdmin;
+	 
+	@PostConstruct
+	private void initAdminSystem() {
+		logger.debug("initAdminSystem sollicité de UserServiceImpl");
+		try {
+			String hashedPassword = utility.encoder(passwordAdmin);
+			User adminSystem = new User();
+			adminSystem.setEmail(emailAdmin);
+			adminSystem.setFirstName(firstNameAdmin);
+			adminSystem.setLastName(lastNameAdmin);
+			adminSystem.setRole(roleAdmin);
+			adminSystem.setBalance(balanceAdmin);
+			adminSystem.setPassword(hashedPassword);
+			if (!userRepository.findByEmail(emailAdmin).isPresent()) {
+				userRepository.save(adminSystem);
+				logger.info("Création Admin effectuée");
+			}else {
+				logger.info("Admin déjà créé");
+			}
+		}catch (Exception e) {
+			logger.error("Erreur au initAdminSystem", e);
+			
+		}
+	}
 	
 	@Override
 	public User createUser(User user) {
-		 	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		 	String hashedPassword = passwordEncoder.encode(user.getPassword());
-	        user.setPassword(hashedPassword);
-		
+	 
+	 	String hashedPassword = utility.encoder(user.getPassword());
+        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+        if(optionalUser.isPresent()) {
+        	User userToUpdate = optionalUser.get();
+        	user.setUserId(userToUpdate.getUserId());
+        	if(user.getPassword().isEmpty()) {
+        		user.setPassword(userToUpdate.getPassword());
+        	}else {
+        		user.setPassword(hashedPassword);
+        	}
+        	
+        }else {
+        	user.setPassword(hashedPassword);
+        }
+	        
 		return userRepository.save(user);
 	}
 	

@@ -23,7 +23,7 @@ public class UserDTO {
 	@Column(name="last_name")
 	private String lastName;
 	
-	private float balance;
+	private String balance;
 	private String ibanNummer;
 	
 	@ManyToMany
