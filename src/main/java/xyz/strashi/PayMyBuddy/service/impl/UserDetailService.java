@@ -1,5 +1,7 @@
 package xyz.strashi.PayMyBuddy.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,14 +15,23 @@ import xyz.strashi.PayMyBuddy.repository.UserRepository;
 @Service
 public class UserDetailService implements UserDetailsService{
 	
+	private static final Logger logger = LoggerFactory.getLogger(UserDetailService.class);
+	
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not present"));
-		
-		return new org.springframework.security.core.userdetails.User(username, user.getPassword(), true, true, true, true, AuthorityUtils.createAuthorityList(user.getRole().toString())) ;
+		logger.debug("loadUserByUsername sollicité de UserDetailService");
+		try {
+			User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not present"));
+			logger.info("loadUserByUsername effectuée de UserDetailService");
+			return new org.springframework.security.core.userdetails.User(username, user.getPassword(), true, true, true, true, AuthorityUtils.createAuthorityList(user.getRole().toString()));
+			
+		}catch (Exception e) {
+			logger.error("Erreur au loadUserByUsername de UserDetailService", e);
+			return null;
+		}
 	}
 
 }

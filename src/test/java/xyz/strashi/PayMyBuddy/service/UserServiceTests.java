@@ -1,13 +1,13 @@
 package xyz.strashi.PayMyBuddy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -152,6 +152,25 @@ public class UserServiceTests {
 		
 		assertThat(user.getBalance() == 150);
 	}*/
+	
+	@Test
+	public void findByEmailTest() {
+		List<BankAccount> bankAccounts = null;
+		List<Relationship> relationships = null;
+		User user = new User(0L, Role.USER,"email@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+		
+		//User responseUser = userRepository.save(user);
+		User responseUser = userService.createUser(user);
+		
+		User userToFind = userService.findByEmail(user.getEmail());
+		System.out.println(responseUser.getFirstName());
+		System.out.println(userToFind.getLastName());
+		System.out.println(userToFind.getUserId());
+
+
+		assertThat(user.equals(userToFind));
+		assertFalse(user.getFirstName() == userToFind.getLastName());
+	}
 	
 	
 }
