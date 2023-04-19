@@ -102,6 +102,61 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<!-- plugin Jacoco necessaire pour rapport-->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.7</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- fin plugin Jacoco necessaire pour rapport-->
+			<!-- necessaire pour mvn site  -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>4.0.0-M3</version>
+				<configuration>
+					<outputDirectory>${project.build.directory}/site</outputDirectory>
+					<relativizeDecorationLinks>false</relativizeDecorationLinks>
+				</configuration>
+			</plugin>
+			<!-- fin necessaire pour mvn site  -->
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<!-- necessaire pour rapport Spotbugs -->
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.7.3.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.4.1</version>
+			</plugin>
+			<!-- fin necessaire pour rapport Spotbugs -->
+			<!-- necessaire pour rapport Jacoco -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.7</version>
+			</plugin>
+			<!--fin  necessaire pour rapport Jacoco -->
+		</plugins>
+	</reporting>
 </project>

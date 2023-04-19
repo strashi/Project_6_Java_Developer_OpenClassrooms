@@ -87,6 +87,10 @@ public class HomeController {
 	public String bankDeposit(Principal principal, String bankAccount, double amount) {
 		logger.debug("PostMapping /bankDeposit sollicité de HomeController");
 		try {
+			if(principal == null) {
+				princip p = new princip();
+				principal = p;
+			}
 			User user = userService.findByEmail(principal.getName());
 			userService.bankDeposit(user, bankAccount, amount);
 			logger.info("PostMapping /bankDeposit réussi de HomeController");
