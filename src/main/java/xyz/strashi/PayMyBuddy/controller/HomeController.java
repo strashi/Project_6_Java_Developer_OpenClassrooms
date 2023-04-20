@@ -2,7 +2,6 @@ package xyz.strashi.PayMyBuddy.controller;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -12,11 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import xyz.strashi.PayMyBuddy.dto.UserDTO;
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.User;
-import xyz.strashi.PayMyBuddy.repository.UserRepository;
 import xyz.strashi.PayMyBuddy.service.UserService;
 import xyz.strashi.PayMyBuddy.service.impl.Utility;
 
@@ -42,13 +42,7 @@ public class HomeController {
 	@GetMapping("/")
 	public String home(Model model, Principal principal) {
 		logger.info("GetMapping/ sollicité de HomeController");
-		//Rajouter pour faire fonctionner HomeControllerTest
-		try {
-			if(principal == null) {
-				Princip p = new Princip();
-				principal = p;
-			}
-			
+		try {			
 			User user = userService.findByEmail(principal.getName());
 			System.out.println(user);
 			UserDTO userDTO = modelMapper.map(user, UserDTO.class);
@@ -66,13 +60,9 @@ public class HomeController {
 	}
 	
 	@PostMapping("/")
-	public String depositMoney(Principal principal, String bankAccount, double amount) {
-		logger.debug("PostMapping / sollicité de HomeController");
+	public String depositMoney(Principal principal, @RequestBody String bankAccount, @RequestBody double amount) {
+		logger.info("PostMapping / sollicité de HomeController");
 		try {
-			if(principal == null) {
-				Princip p = new Princip();
-				principal = p;
-			}
 			
 			User user = userService.findByEmail(principal.getName());
 			userService.depositMoney(user, bankAccount, amount);
@@ -88,10 +78,7 @@ public class HomeController {
 	public String bankDeposit(Principal principal, String bankAccount, double amount) {
 		logger.debug("PostMapping /bankDeposit sollicité de HomeController");
 		try {
-			if(principal == null) {
-				Princip p = new Princip();
-				principal = p;
-			}
+			
 			User user = userService.findByEmail(principal.getName());
 			userService.bankDeposit(user, bankAccount, amount);
 			logger.info("PostMapping /bankDeposit réussi de HomeController");
@@ -173,10 +160,3 @@ public class HomeController {
 		
 }
 
-class Princip implements Principal{
-
-	@Override
-	public String getName() {
-		return "email1@xyz";
-	}
-}
