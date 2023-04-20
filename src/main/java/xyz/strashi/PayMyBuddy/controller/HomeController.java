@@ -45,11 +45,12 @@ public class HomeController {
 		//Rajouter pour faire fonctionner HomeControllerTest
 		try {
 			if(principal == null) {
-				princip p = new princip();
+				Princip p = new Princip();
 				principal = p;
 			}
 			
 			User user = userService.findByEmail(principal.getName());
+			System.out.println(user);
 			UserDTO userDTO = modelMapper.map(user, UserDTO.class);
 			userDTO.setBalance(utility.amountFormatter(user.getBalance()));
 			model.addAttribute("userDTO", userDTO);
@@ -69,7 +70,7 @@ public class HomeController {
 		logger.debug("PostMapping / sollicité de HomeController");
 		try {
 			if(principal == null) {
-				princip p = new princip();
+				Princip p = new Princip();
 				principal = p;
 			}
 			
@@ -88,7 +89,7 @@ public class HomeController {
 		logger.debug("PostMapping /bankDeposit sollicité de HomeController");
 		try {
 			if(principal == null) {
-				princip p = new princip();
+				Princip p = new Princip();
 				principal = p;
 			}
 			User user = userService.findByEmail(principal.getName());
@@ -172,7 +173,7 @@ public class HomeController {
 		
 }
 
-class princip implements Principal{
+class Princip implements Principal{
 
 	@Override
 	public String getName() {
