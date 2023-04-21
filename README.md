@@ -1,8 +1,7 @@
 # PayMyBuddy
 <h3>Diagramme des classes du modèle en UML <h3/>
 
-![image](https://user-images.githubusercontent.com/94161747/233015079-43a098b1-6c27-4e01-bfce-e2409bd42301.png)
-
+![image](https://user-images.githubusercontent.com/94161747/233578423-380929ae-bd4f-4ede-8eaf-4ef9ef6400c3.png)
 
  <br/> 
 <h3>Modèle physique des données<h3/>
