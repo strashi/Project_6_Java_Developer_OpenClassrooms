@@ -1,6 +1,7 @@
 package xyz.strashi.PayMyBuddy.service.impl;
 
 import org.slf4j.Logger;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -11,7 +12,11 @@ import org.springframework.stereotype.Service;
 
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
-
+/**
+ * Class used for the authentication
+ * @author steve
+ *
+ */
 @Service
 public class UserDetailService implements UserDetailsService{
 	

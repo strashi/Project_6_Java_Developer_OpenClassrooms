@@ -2,6 +2,8 @@ package xyz.strashi.PayMyBuddy.controller;
 
 import java.security.Principal;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -11,7 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.service.UserService;
-
+/**
+ * The update page.
+ * @author steve
+ *
+ */
 @Controller
 public class ProfileController {
 	
@@ -40,13 +46,21 @@ public class ProfileController {
 	}
 	
 	@PostMapping("/profile")
-	public String update(User user) {
+	public String update(User user, Principal principal) {
 		logger.debug("PostMapping /profile sollicité de ProfileController");
 		try {
 		
-			userService.createUser(user);
-			logger.info("PostMapping /profile réussi de ProfileController");
-			return "redirect:/";
+			User userTest = userService.updateUser(user, principal);
+			
+			if(userTest == null) {
+				logger.info("PostMapping /profile user null réussi de ProfileController");
+				return "profile2";
+			}else {
+				logger.info("PostMapping /profile réussi de ProfileController");
+				return "redirect:/";
+			}
+				
+			
 		}catch (Exception e) {
 			logger.error("Erreur au PostMapping /profile du ProfileController", e);
 			return null;

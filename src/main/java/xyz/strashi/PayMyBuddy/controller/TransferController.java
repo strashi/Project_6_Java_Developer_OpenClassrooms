@@ -20,7 +20,11 @@ import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.service.TransactionService;
 import xyz.strashi.PayMyBuddy.service.UserService;
 import xyz.strashi.PayMyBuddy.service.impl.Utility;
-
+/**
+* The transaction page. I used the class transactionDTO to change amount from double to String
+* @author steve
+*
+*/
 @Controller
 public class TransferController {
 	

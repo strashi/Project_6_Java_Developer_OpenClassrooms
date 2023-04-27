@@ -43,7 +43,7 @@
 			<div class="mt-5">
 				<h4>Reload PayMyBuddy Account</h4>
 				<form th:action="@{/}" method="POST">
-					<select name="bankAccount">
+					<select name="ibanNumber">
 						<option value="">Select A Bank Account</option>
 						<option th:each="bankAccount : ${bankAccounts}" th:value="${bankAccount.ibanNumber}"
 							th:text="${bankAccount.accountDescription}">
@@ -57,7 +57,7 @@
 			<div class="mt-5">
 				<h4>Deposit Money in your Bank Account</h4>
 				<form th:action="@{/bankDeposit}" method="POST">
-					<select name="bankAccount">
+					<select name="ibanNumber">
 						<option value="">Select A Bank Account</option>
 						<option th:each="bankAccount : ${bankAccounts}" th:value="${bankAccount.ibanNumber}"
 							th:text="${bankAccount.accountDescription}">

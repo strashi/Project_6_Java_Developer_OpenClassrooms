@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -38,22 +40,28 @@ public class User  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="user_id")
+	@Column(name="user_id", nullable = false, unique = true)
 	private Long userId;
 	
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.USER;
 	
-	@Column(unique = true)
+	@Column(length = 50, nullable = false, unique = true)
+	@NotBlank(message="email cannot be empty or null")
+	@Email(message = " please enter a valid email address")
 	private String email;
+	
+	@Column(length = 60)
+	@NotBlank(message="password cannot be empty or null")
 	private String password;
 	
-	@Column(name="first_name")
+	@Column(name="first_name", length = 30)
 	private String firstName;
 	
-	@Column(name="last_name")
+	@Column(name="last_name", length = 30)
 	private String lastName;
 	
+	@Column(nullable = false)
 	private double balance;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -70,6 +78,10 @@ public class User  {
 	@JoinColumn(name="user_id")
 	List<Relationship> friends= new ArrayList<>();
 	
-	//,fetch = FetchType.LAZY
-
+	
+	/*
+	public List<BankAccount> getBankAccounts(){
+		return new ArrayList<BankAccount>(this.getBankAccounts());
+		
+	}*/
 }

@@ -1,22 +1,28 @@
 package xyz.strashi.PayMyBuddy.service.impl;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import xyz.strashi.PayMyBuddy.controller.LoginController;
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
 import xyz.strashi.PayMyBuddy.model.Role;
@@ -25,13 +31,21 @@ import xyz.strashi.PayMyBuddy.repository.BankAccountRepository;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
 import xyz.strashi.PayMyBuddy.service.TransactionService;
 import xyz.strashi.PayMyBuddy.service.UserService;
-
+/**
+ * At first the admin is created when he doesn't already exist, with datas from Application.properties.
+ * 
+ * @author steve
+ *
+ */
 @Service
 @DynamicUpdate
 public class UserServiceImpl implements UserService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -86,27 +100,168 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 	
+//	@Override
+//	public User createUser(User user, Principal principal) {
+//		logger.debug("createUser sollicité de UserServiceImpl");
+//		boolean save = true;
+//		try {
+//		  	String hashedPassword = utility.encoder(user.getPassword());
+//		  	
+//		  	String emailPrincipal = principal.getName();
+//		  	Optional<User> optionalCurrentUser = userRepository.findByEmail(emailPrincipal);
+//		  	User currentUser = optionalCurrentUser.get();
+//		  	long idCurrentUser = currentUser.getUserId();
+//
+//		  	Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+//	        if(optionalUser.isPresent()) {
+//	        	User userToUpdate = optionalUser.get();
+//	        	
+//	        	if(userToUpdate.getUserId() == idCurrentUser) {
+//	        	
+//		        	user.setUserId(userToUpdate.getUserId());
+//		        	if(user.getPassword().isEmpty()) {
+//		        		user.setPassword(userToUpdate.getPassword());
+//		        	}else {
+//		        		user.setPassword(hashedPassword);
+//		        	}
+//	        	}else {
+//	        		//cas où le nouvel email choisi est déjà utilisé par une autre personne
+//	        		System.out.println("email déjà utilisé par un autre profile");
+//	        		save = false;
+//	        	}
+//	        }else {
+//	        	user.setPassword(hashedPassword);
+//	        }
+//			logger.info("CreateUser effectuée de UserServiceImpl");
+//			
+//			if(save)
+//				return userRepository.save(user);
+//			else
+//				return null;
+//		}catch (Exception e) {
+//			logger.error("Erreur au createUser de UserServiceImpl", e);
+//			return null;
+//		}
+//	}
+	
+	public User updateUser(User user, Principal principal) {
+		logger.debug("updateUser sollicité de UserServiceImpl");
+		boolean save = true;
+		try {
+		  	String hashedPassword = utility.encoder(user.getPassword());
+		  	
+		  	//recherche de l'id de l utilisateur actuellement connecté
+		  	String emailPrincipal = principal.getName();
+		  	Optional<User> optionalCurrentUser = userRepository.findByEmail(emailPrincipal);
+		  	User currentUser = optionalCurrentUser.get();
+		  	long idCurrentUser = currentUser.getUserId();
+
+		  	//recherche  si l'email de l'utilisateur actualisé est déjà dans la bd 
+		  	Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+		 
+	        if(optionalUser.isPresent()) {
+	        	User userInDb = optionalUser.get();
+	         	//Si oui on teste si l'id de l utilisateur actuellement connecté est le même que l'id correspondant
+			  	//à l'email de l'utilisateur actualisé
+	        	if(userInDb.getUserId() == idCurrentUser) {
+	        	//alors l'email n'a pas été actualisé
+		        	user.setUserId(idCurrentUser);
+		        	if(user.getPassword().isEmpty()) {
+		        		user.setPassword(userInDb.getPassword());
+		        	}else {
+		        		user.setPassword(hashedPassword);
+		        	}
+		        	user.setBalance(currentUser.getBalance());
+		        	user.setBankAccounts(currentUser.getBankAccounts());
+		        	user.setFriends(currentUser.getFriends());
+		        	user.setRole(currentUser.getRole());
+		        	
+		        	userRepository.save(user);
+	        	}else {
+	        		//cas où le nouvel email choisi est déjà utilisé par un autre compte
+	        		System.out.println("email déjà utilisé par un autre compte");
+	        		//save = false;
+	        		user = null;
+	        	}
+	        }else {
+	        	if(user.getPassword().isEmpty()) {
+	        		user.setPassword(currentUser.getPassword());
+	        	}else {
+	        		user.setPassword(hashedPassword);
+	        	}
+	        	user.setUserId(currentUser.getUserId());
+	        	user.setBalance(currentUser.getBalance());
+	        	user.setBankAccounts(currentUser.getBankAccounts());
+	        	user.setFriends(currentUser.getFriends());
+	        	user.setRole(currentUser.getRole());
+	        	
+	        	System.out.println("1 nom principal "+principal.getName());
+	        	System.out.println("mail user "+user.getEmail());
+	        	System.out.println("password user "+user.getPassword());
+	        	
+
+	        	userRepository.save(user);
+	        
+	        	//Changement du principal Marche pas	        	
+	        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        	
+	        	System.out.println("name auth "+auth.getName());
+	        	System.out.println("principal "+auth.getPrincipal());
+	        	//UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), hashedPassword);
+	        	//token.setDetails(new WebAuthenticationDetails(request));
+	        
+	        
+	        	Authentication newAuth =  new UsernamePasswordAuthenticationToken(user.getEmail(), auth.getCredentials());
+	        	SecurityContext context = SecurityContextHolder.getContext();
+	        	context.setAuthentication(newAuth);
+	        	
+	        	
+	        	logger.debug("updateUser authentication requestl");
+	        	//Authentication result = authenticationManager.authenticate(request);
+	        	
+	        	logger.debug("updateUser authentication result");
+	        	SecurityContextHolder.setContext(context);
+	        	logger.debug("updateUser getContext()l");
+	        	System.out.println("2 nom principal "+principal.getName());
+	        	//userRepository.delete(currentUser);
+	        
+	        }
+			logger.info("updateUser effectuée de UserServiceImpl");
+			
+			return user;
+			
+		}catch (Exception e) {
+			logger.error("Erreur au updateUser de UserServiceImpl", e);
+			return null;
+		}
+	}
+	
 	@Override
 	public User createUser(User user) {
 		logger.debug("createUser sollicité de UserServiceImpl");
 		try {
 		  	String hashedPassword = utility.encoder(user.getPassword());
-	        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+		  	
+		  	Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
 	        if(optionalUser.isPresent()) {
-	        	User userToUpdate = optionalUser.get();
-	        	user.setUserId(userToUpdate.getUserId());
-	        	if(user.getPassword().isEmpty()) {
-	        		user.setPassword(userToUpdate.getPassword());
-	        	}else {
-	        		user.setPassword(hashedPassword);
-	        	}
-	        	
+////	        	User userToUpdate = optionalUser.get();
+////	        	user.setUserId(userToUpdate.getUserId());
+////	        	if(user.getPassword().isEmpty()) {
+////	        		user.setPassword(userToUpdate.getPassword());
+//	        	}else {
+//	        		user.setPassword(hashedPassword);
+//	        	}
+//	        	
+//	        }else {
+//	        	user.setPassword(hashedPassword);
+	        	logger.info("CreateUser non effectuée de UserServiceImpl car user déjà présent");
+	        	return null;
 	        }else {
-	        	user.setPassword(hashedPassword);
-	        }
+	        user.setPassword(hashedPassword);
 			logger.info("CreateUser effectuée de UserServiceImpl");
    
 			return userRepository.save(user);
+	        }
 		}catch (Exception e) {
 			logger.error("Erreur au createUser de UserServiceImpl", e);
 			return null;
@@ -117,6 +272,7 @@ public class UserServiceImpl implements UserService{
 	public void depositMoney(User user, String ibanNumber, double amount) {
 		logger.debug("depositMoney sollicité de UserServiceImpl");
 		try {
+			
 			BankAccount bankAccount = bankAccountRepository.findByIbanNumber(ibanNumber);
 			String description = "Reload from "+bankAccount.getAccountDescription();
 			User admin = userRepository.findByEmail("admin@paymybuddy.com").orElseThrow(() -> new UsernameNotFoundException("User not present"));
@@ -151,7 +307,7 @@ public class UserServiceImpl implements UserService{
 	public List<Relationship> getRelationships(User user) {
 		logger.debug("getRelationships sollicité de UserServiceImpl");
 		try {
-			Optional<User> opt = userRepository.findById(user.getUserId());
+			Optional<User> opt = userRepository.findByEmail(user.getEmail());
 			User responseUser = opt.get();
 			List<Relationship> relationshipsList = responseUser.getFriends();
 			logger.info("getRelationships effectuée de UserServiceImpl");
@@ -210,7 +366,6 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 	
-
 	public User findByEmail(String email) {
 		logger.debug("findByEmail sollicité de UserServiceImpl");
 		try {
@@ -238,9 +393,5 @@ public class UserServiceImpl implements UserService{
 		}
 		
 	}
-
 	
-
-	
-
 }

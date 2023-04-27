@@ -11,15 +11,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import xyz.strashi.PayMyBuddy.dto.UserDTO;
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.service.UserService;
 import xyz.strashi.PayMyBuddy.service.impl.Utility;
-
+/**
+ * The main page. I used the class userDTO to change amount from double to String
+ * @author steve
+ *
+ */
 @Controller
 public class HomeController {
 	
@@ -41,7 +43,7 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String home(Model model, Principal principal) {
-		logger.info("GetMapping/ sollicité de HomeController");
+		logger.debug("GetMapping/ sollicité de HomeController");
 		try {			
 			User user = userService.findByEmail(principal.getName());
 			System.out.println(user);
@@ -58,14 +60,14 @@ public class HomeController {
 			return null;
 		}
 	}
-	
+	// to deposit money from bankAccount to payMyBuddyAccount
 	@PostMapping("/")
-	public String depositMoney(Principal principal, @RequestBody String bankAccount, @RequestBody double amount) {
-		logger.info("PostMapping / sollicité de HomeController");
+	public String depositMoney(Principal principal, String ibanNumber, double amount) {
+		logger.debug("PostMapping / sollicité de HomeController");
 		try {
-			
+		
 			User user = userService.findByEmail(principal.getName());
-			userService.depositMoney(user, bankAccount, amount);
+			userService.depositMoney(user, ibanNumber, amount);
 			logger.info("PostMapping / réussi de HomeController");
 			return "redirect:/";
 		}catch (Exception e) {
@@ -73,14 +75,14 @@ public class HomeController {
 			return null;
 		}
 	}
-	
+	// to deposit money from  payMyBuddyAccount to bankAccount
 	@PostMapping("/bankDeposit")
-	public String bankDeposit(Principal principal, String bankAccount, double amount) {
+	public String bankDeposit(Principal principal, String ibanNumber, double amount) {
 		logger.debug("PostMapping /bankDeposit sollicité de HomeController");
 		try {
 			
 			User user = userService.findByEmail(principal.getName());
-			userService.bankDeposit(user, bankAccount, amount);
+			userService.bankDeposit(user, ibanNumber, amount);
 			logger.info("PostMapping /bankDeposit réussi de HomeController");
 
 			return "redirect:/";
@@ -115,14 +117,33 @@ public class HomeController {
 		}
 		
 	}
+	
+	@GetMapping("/createUser2")
+	public String createUser2() {
+		logger.debug("GetMapping /createUser2 sollicité de HomeController");
+		try {
+			logger.info("GetMapping /createUser2 réussi de HomeController");
+			return "createUser2";
+		}catch (Exception e) {
+			logger.error("Erreur au GetMapping /createUser2 du HomeController", e);
+			return null;
+		}
+		
+	}
 		
 	@PostMapping("/createUser" )
 	public String createUser(User user) {
 		logger.debug("PostMapping /createUser sollicité de HomeController");
 		try {
-			userService.createUser(user);
-			logger.info("PostMapping /createUser réussi de HomeController");
-			return "redirect:/login";
+			User userTest = userService.createUser(user);
+			if(userTest == null) {
+				logger.info("PostMapping /createUser avec user null réussi de HomeController");
+				return "createUser2";
+			}else {
+				logger.info("PostMapping /createUser réussi de HomeController");
+				return "redirect:/login";
+			}
+			
 		}catch (Exception e) {
 			logger.error("Erreur au PostMapping /createUser du HomeController", e);
 			return null;

@@ -11,6 +11,7 @@ public class PayMyBuddyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PayMyBuddyApplication.class, args);
 	}
+	
 	@Bean
 	ModelMapper modelMapper() {
 		return new ModelMapper();

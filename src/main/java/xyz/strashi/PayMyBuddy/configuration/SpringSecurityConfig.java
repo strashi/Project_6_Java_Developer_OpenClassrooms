@@ -13,7 +13,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import xyz.strashi.PayMyBuddy.service.impl.UserDetailService;
-
+/**
+ * Security configuration allowing connection with the app
+ * 
+ * @author steve
+ *
+ */
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
@@ -30,7 +35,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.anyRequest().authenticated()
 		.and()
 		.formLogin()
-		  .loginPage("/login") 
+		  .loginPage("/login")
 	      .permitAll() 
 	      .and()
 	    .logout()
@@ -39,7 +44,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	

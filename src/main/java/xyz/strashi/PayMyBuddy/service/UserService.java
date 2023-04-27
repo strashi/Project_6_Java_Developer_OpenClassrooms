@@ -1,6 +1,8 @@
 package xyz.strashi.PayMyBuddy.service;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
@@ -9,6 +11,8 @@ import xyz.strashi.PayMyBuddy.model.User;
 public interface UserService {
 	
 	public User createUser(User user);
+	
+	public User updateUser(User user, Principal principal);
 
 	public void depositMoney(User user, String ibanNumber, double amount);
 	
