@@ -17,7 +17,7 @@ import xyz.strashi.PayMyBuddy.dto.UserDTO;
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.service.UserService;
-import xyz.strashi.PayMyBuddy.service.impl.Utility;
+import xyz.strashi.PayMyBuddy.tools.Utility;
 /**
  * The main page. I used the class userDTO to change amount from double to String
  * @author steve

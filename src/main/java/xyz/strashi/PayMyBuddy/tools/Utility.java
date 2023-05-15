@@ -1,4 +1,4 @@
-package xyz.strashi.PayMyBuddy.service.impl;
+package xyz.strashi.PayMyBuddy.tools;
 
 import java.util.Formatter;
 
