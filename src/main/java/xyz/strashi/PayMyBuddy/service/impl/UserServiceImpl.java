@@ -42,9 +42,7 @@ import xyz.strashi.PayMyBuddy.service.UserService;
 public class UserServiceImpl implements UserService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-	
-//	@Autowired
-//	private AuthenticationManager authenticationManager;
+
 	
 	@Autowired
 	private UserRepository userRepository;

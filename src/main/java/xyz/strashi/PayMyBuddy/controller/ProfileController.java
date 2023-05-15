@@ -27,9 +27,6 @@ public class ProfileController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
-//	@Autowired
-//	private AuthenticationManager authenticationManager;
-	
 	
 	private UserService userService;
 	
@@ -57,6 +54,7 @@ public class ProfileController {
 		logger.debug("PostMapping /profile sollicité de ProfileController");
 		try {
 		
+
 			userService.updateUser(user, principal);
         	return "redirect:/";
 					
