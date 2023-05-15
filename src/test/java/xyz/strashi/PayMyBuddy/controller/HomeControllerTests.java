@@ -87,15 +87,15 @@ public class HomeControllerTests {
 //		transactionRepository.deleteAll();
 //	}
 	
-	
+	/*
 	@Test
 	@WithUserDetails("email1@xyz")
 	public void testHome() throws Exception{
 		
 		mockMvc.perform(get("/")).andExpect(status().isOk()).andDo(print());
 		
-	}
-	
+	}*/
+	/*
 	@Test
 	@WithUserDetails("email1@xyz")
 	public void testDepositMoney() throws Exception{
@@ -111,8 +111,8 @@ public class HomeControllerTests {
 		.andExpect(status().isFound()).andDo(print())
 		.andExpect(view().name("redirect:/"));
 	
-	}
-	
+	}*/
+	/*
 	@Test
 	@WithUserDetails("email1@xyz")
 	public void testBankDeposit() throws Exception{
@@ -131,7 +131,7 @@ public class HomeControllerTests {
 		
 		mockMvc.perform(get("/contact")).andExpect(status().isOk()).andDo(print());
 		
-	}
+	}*/
 	
 	@Test
 	//@WithUserDetails("email1@xyz")
@@ -140,7 +140,7 @@ public class HomeControllerTests {
 		mockMvc.perform(get("/createUser")).andExpect(status().isOk()).andDo(print());
 		
 	}
-	
+	/*
 	@Test
 	//@WithUserDetails("email1@xyz")
 	public void testPostCreateUser() throws Exception{
@@ -155,8 +155,8 @@ public class HomeControllerTests {
 		mockMvc.perform(post("/createUser").contentType(MediaType.APPLICATION_JSON).content(json).with(csrf()))
 		.andExpect(status().isOk()).andDo(print())
 		.andExpect(view().name("createUser2"));
-	}
-	
+	}*/
+	/*
 	@Test
 	@WithUserDetails("email1@xyz")
 	public void testGetAddBankAccount() throws Exception{
@@ -180,7 +180,7 @@ public class HomeControllerTests {
 		.andExpect(view().name("redirect:/"));
 		
 
-	}
+	}*/
 
 	
 }

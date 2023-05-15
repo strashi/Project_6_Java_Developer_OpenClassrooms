@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import xyz.strashi.PayMyBuddy.dto.TransactionDTO;
 import xyz.strashi.PayMyBuddy.dto.UserDTO;
@@ -73,13 +74,20 @@ public class TransferController {
 	}
 	
 	@PostMapping("/transfer")
-	public String transfer(Principal principal, String emailCreditor,  double amount, String description) {
+	public String transfer(Principal principal, String emailCreditor,  double amount, 
+			String description, RedirectAttributes redirAttrs) {
 		logger.debug("PostMapping /transfer sollicité de TransferController");
 		try {
 			User debitor = userService.findByEmail(principal.getName());
 			User creditor = userService.findByEmail(emailCreditor);
-			transactionService.executeTransaction(debitor, creditor, amount, description,true);
-			logger.info("PostMapping /transfer réussi de TransferController");
+			if((debitor.getBalance() - amount)>= 0) {
+				transactionService.executeTransaction(debitor, creditor, amount, description,true);
+				logger.info("PostMapping /transfer réussi de TransferController");
+			}else {
+				logger.info("PostMapping /transfer échoué car balance < 0 de TransferController");
+				redirAttrs.addFlashAttribute("error","Solde insuffisant");
+			}
+			
 			return "redirect:/transfer";
 		}catch (Exception e) {
 			logger.error("Erreur au PostMapping /transfer du TransferController", e);

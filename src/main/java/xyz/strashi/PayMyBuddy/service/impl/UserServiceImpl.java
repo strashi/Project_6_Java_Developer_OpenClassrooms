@@ -42,9 +42,9 @@ import xyz.strashi.PayMyBuddy.service.UserService;
 public class UserServiceImpl implements UserService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-	
+	/*
 	@Autowired
-	private AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;*/
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -195,32 +195,32 @@ public class UserServiceImpl implements UserService{
 	        	user.setFriends(currentUser.getFriends());
 	        	user.setRole(currentUser.getRole());
 	        	
-	        	System.out.println("1 nom principal "+principal.getName());
-	        	System.out.println("mail user "+user.getEmail());
-	        	System.out.println("password user "+user.getPassword());
+//	        	System.out.println("1 nom principal "+principal.getName());
+//	        	System.out.println("mail user "+user.getEmail());
+//	        	System.out.println("password user "+user.getPassword());
 	        	
 
 	        	userRepository.save(user);
 	        
 	        	//Changement du principal Marche pas	        	
-	        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//	        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	        	
-	        	System.out.println("name auth "+auth.getName());
-	        	System.out.println("principal "+auth.getPrincipal());
+//	        	System.out.println("name auth "+auth.getName());
+//	        	System.out.println("principal "+auth.getPrincipal());
 	        	//UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), hashedPassword);
 	        	//token.setDetails(new WebAuthenticationDetails(request));
 	        
 	        
-	        	Authentication newAuth =  new UsernamePasswordAuthenticationToken(user.getEmail(), auth.getCredentials());
-	        	SecurityContext context = SecurityContextHolder.getContext();
-	        	context.setAuthentication(newAuth);
+//	        	Authentication newAuth =  new UsernamePasswordAuthenticationToken(user.getEmail(), auth.getCredentials());
+//	        	SecurityContext context = SecurityContextHolder.getContext();
+//	        	context.setAuthentication(newAuth);
 	        	
 	        	
 	        	logger.debug("updateUser authentication requestl");
 	        	//Authentication result = authenticationManager.authenticate(request);
 	        	
 	        	logger.debug("updateUser authentication result");
-	        	SecurityContextHolder.setContext(context);
+	        	//SecurityContextHolder.setContext(context);
 	        	logger.debug("updateUser getContext()l");
 	        	System.out.println("2 nom principal "+principal.getName());
 	        	//userRepository.delete(currentUser);

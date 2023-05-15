@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import xyz.strashi.PayMyBuddy.dto.UserDTO;
 import xyz.strashi.PayMyBuddy.model.BankAccount;
@@ -117,33 +118,21 @@ public class HomeController {
 		}
 		
 	}
-	
-	@GetMapping("/createUser2")
-	public String createUser2() {
-		logger.debug("GetMapping /createUser2 sollicité de HomeController");
-		try {
-			logger.info("GetMapping /createUser2 réussi de HomeController");
-			return "createUser2";
-		}catch (Exception e) {
-			logger.error("Erreur au GetMapping /createUser2 du HomeController", e);
-			return null;
-		}
-		
-	}
-		
+			
 	@PostMapping("/createUser" )
-	public String createUser(User user) {
+	public String createUser(User user, RedirectAttributes redirAttrs) {
 		logger.debug("PostMapping /createUser sollicité de HomeController");
 		try {
 			User userTest = userService.createUser(user);
 			if(userTest == null) {
-				logger.info("PostMapping /createUser avec user null réussi de HomeController");
-				return "createUser2";
+				logger.info("PostMapping /createUser échoué avec user null de HomeController");
+				redirAttrs.addFlashAttribute("error","Email non valide");
+				return "redirect:/createUser";
 			}else {
 				logger.info("PostMapping /createUser réussi de HomeController");
 				return "redirect:/login";
+
 			}
-			
 		}catch (Exception e) {
 			logger.error("Erreur au PostMapping /createUser du HomeController", e);
 			return null;

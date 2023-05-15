@@ -7,24 +7,24 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  		<div class="container-fluid">
-    		 <span class="d-flex p-2 justify-content-center"> <a class="d-flex p-2 justify-content-center btn btn-success " style="width: 120px;" href="#">Pay My Buddy</a></span>
+<!-- 	<nav class="navbar navbar-expand-lg bg-body-tertiary"> -->
+<!--   		<div class="container-fluid"> -->
+<!--     		 <span class="d-flex p-2 justify-content-center"> <a class="d-flex p-2 justify-content-center btn btn-success " style="width: 120px;" href="#">Pay My Buddy</a></span> -->
 
-    		<div class="collapse navbar-collapse nav justify-content-end" id="navbarNavAltMarkup">
-    			<div class="navbar-nav ">
-        			<a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
-       				<a class="nav-link" th:href="@{/transfer}">Transfer</a>
-        			<a class="nav-link" th:href="@{/profile}">Profile</a>
-       				<a class="nav-link" th:href="@{/contact}">Contact</a>
-        			<a class="nav-link" th:href="@{/admin}">Admin</a>
-         			<a class="nav-link" th:href="@{/login}">Log off</a>
-      			</div>
-    		</div>
-  		</div>
-	</nav>
+<!--     		<div class="collapse navbar-collapse nav justify-content-end" id="navbarNavAltMarkup"> -->
+<!--     			<div class="navbar-nav "> -->
+<!--         			<a class="nav-link active" aria-current="page" th:href="@{/}">Home</a> -->
+<!--        				<a class="nav-link" th:href="@{/transfer}">Transfer</a> -->
+<!--         			<a class="nav-link" th:href="@{/profile}">Profile</a> -->
+<!--        				<a class="nav-link" th:href="@{/contact}">Contact</a> -->
+<!--         			<a class="nav-link" th:href="@{/admin}">Admin</a> -->
+<!--          			<a class="nav-link" th:href="@{/logout}">Log off</a> -->
+<!--       			</div> -->
+<!--     		</div> -->
+<!--   		</div> -->
+<!-- 	</nav> -->
 
-	
+	  <div th:insert="navbar.html::navbar"></div>
 	
 	<nav aria-label="breadcrumb">
 	  <ol class="breadcrumb ms-3">
