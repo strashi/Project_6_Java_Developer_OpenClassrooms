@@ -124,6 +124,7 @@ public class HomeController {
 		logger.debug("PostMapping /createUser sollicité de HomeController");
 		try {
 			User userTest = userService.createUser(user);
+		
 			if(userTest == null) {
 				logger.info("PostMapping /createUser échoué avec user null de HomeController");
 				redirAttrs.addFlashAttribute("error","Email non valide");

@@ -3,90 +3,89 @@
 <head>
 <meta charset="UTF-8" />
 <title>Home</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
 </head>
 <body>
 
-		  <div th:insert="navbar.html::navbar"></div>
-	
-	   	 	
-<!-- 	<nav class="navbar navbar-expand-lg bg-body-tertiary"> -->
-<!--   <div class="container-fluid"> -->
-<!--       		 <span class="d-flex p-2 justify-content-center"> <a class="d-flex p-2 justify-content-center btn btn-success " style="width: 120px;" href="#">Pay My Buddy</a></span> -->
+	<div th:insert="navbar.html::navbar"></div>
 
-<!--     <div class="collapse navbar-collapse nav justify-content-end" id="navbarNavAltMarkup"> -->
-<!--       <div class="navbar-nav "> -->
-<!--         <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a> -->
-<!--         <a class="nav-link" th:href="@{/transfer}">Transfer</a> -->
-<!--         <a class="nav-link" th:href="@{/profile}">Profile</a> -->
-<!--         <a class="nav-link" th:href="@{/contact}">Contact</a> -->
-<!--          <a class="nav-link" th:href="@{/login}">Log off</a> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--   </div> -->
-<!-- </nav> -->
-<h3><a th:href="@{/createUser}">Create user</a>	</h3>
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb ms-3">
-    <li class="breadcrumb-item active" aria-current="page">Home</li>
-  </ol>
-</nav>
+	<h3>
+		<a th:href="@{/createUser}">Create user</a>
+	</h3>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb ms-3">
+			<li class="breadcrumb-item active" aria-current="page">Home</li>
+		</ol>
+	</nav>
 
 	<section class="container-md">
-	
+
 		<section>
-		<h3>Bonjour admin!</h3>
+			<h3>Bonjour admin!</h3>
 			<h3>Balance</h3>
-									
-			<h4><span th:text="${userDTO} ? ${userDTO.balance} : 'No account' "></span></h4>
-			
+
+			<h4>
+				<span th:text="${userDTO} ? ${userDTO.balance} : 'No account' "></span>
+			</h4>
+
 			<h3>Deposit Money in your Bank Account</h3>
 			<form th:action="@{/bankDeposit}" method="POST">
 				<select name="bankAccount">
 					<option value="">Select A Bank Account</option>
-					<option th:each="bankAccount : ${bankAccounts}" th:value="${bankAccount.ibanNumber}"
+					<option th:each="bankAccount : ${bankAccounts}"
+						th:value="${bankAccount.ibanNumber}"
 						th:text="${bankAccount.accountDescription}">
-					
-				</select>
-				<input type="number" name="amount" min="0"  /> 
-				<input type="submit" name="deposit" value="Deposit!" />
+				</select> <input type="number" name="amount" min="0" /> <input
+					type="submit" name="deposit" value="Deposit!" />
 			</form>
-				<h5><a th:href="@{/addBankAccount}">Add Bank Account</a>	</h5>
+			<h5>
+				<a th:href="@{/addBankAccount}">Add Bank Account</a>
+			</h5>
 		</section>
 		<section>
 			<div>
 				<h3>My Transactions</h3>
 			</div>
 			<div>
-				
-					<table class="table table-striped ">
-						<thead >
-							<tr class="table-success ">
-								<th class="nav justify-content-center">Connections</th>
-								<th >Description</th>
-								<th class="nav justify-content-center">Amount</th>
-							</tr>
-						</thead>
-						
-						<tbody>
-							<tr th:if="${transactionDTOsList.empty}">
-								<td colspan="3">Aucune transaction</td>
-							</tr> 
-							<tr th:each="transactionDTO : ${transactionDTOsList}">
-								<td><span class="nav justify-content-center" th:text="${transactionDTO.creditor.getFirstName()}"></span></td>
-								<td><span class="nav justify-content-center" th:text="${transactionDTO.description}"></span></td>
-								<td><span class="nav justify-content-center" th:text="${transactionDTO.amount}"></span></td>
-							</tr>
-						</tbody>
-					</table>
-				
-				
-				
+
+				<table class="table table-striped ">
+					<thead>
+						<tr class="table-success ">
+							<th class="nav justify-content-center">Connections</th>
+							<th>Description</th>
+							<th class="nav justify-content-center">Amount</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:if="${transactionDTOsList.empty}">
+							<td colspan="3">Aucune transaction</td>
+						</tr>
+						<tr th:each="transactionDTO : ${transactionDTOsList}">
+							<td><span class="nav justify-content-center"
+								th:text="${transactionDTO.creditor.getFirstName()}"></span></td>
+							<td><span class="nav justify-content-center"
+								th:text="${transactionDTO.description}"></span></td>
+							<td><span class="nav justify-content-center"
+								th:text="${transactionDTO.amount}"></span></td>
+						</tr>
+					</tbody>
+				</table>
+
+
+
 			</div>
 		</section>
 
 	</section>
-	 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+		crossorigin="anonymous"></script>
 </body>
 
 </html>

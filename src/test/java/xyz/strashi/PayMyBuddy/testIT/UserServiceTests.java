@@ -1,19 +1,17 @@
-package xyz.strashi.PayMyBuddy.service;
+package xyz.strashi.PayMyBuddy.testIT;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
@@ -22,7 +20,7 @@ import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.repository.BankAccountRepository;
 import xyz.strashi.PayMyBuddy.repository.TransactionRepository;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
-import xyz.strashi.PayMyBuddy.tools.Utility;
+import xyz.strashi.PayMyBuddy.service.UserService;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
@@ -31,7 +29,7 @@ public class UserServiceTests {
 	@Autowired
 	private UserService userService;
 	
-	@MockBean
+	@Autowired
 	private UserRepository userRepository;
 	
 	@Autowired
@@ -40,9 +38,6 @@ public class UserServiceTests {
 	@Autowired
 	private TransactionRepository transactionRepository;
 	
-	@MockBean
-	private Utility utility;
-	
 //	@BeforeEach
 //	public void delete() {
 //		userRepository.deleteAll();
@@ -50,39 +45,35 @@ public class UserServiceTests {
 //		
 //	}
 	
-//	@BeforeAll
-//	private void init() {
-//		transactionRepository.deleteAll();
-//		userRepository.deleteAll();
-//		bankAccountRepository.deleteAll();
-//		
-//		List<BankAccount> bankAccounts = new ArrayList<>();
-//		List<Relationship> relationships = new ArrayList<>();
-//		User user1 = new User(0L, Role.USER,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
-//		User user2 = new User(0L, Role.USER,"email2@xyz","password","firstName2","lastName2",50.0f, bankAccounts, relationships);
-//		User user3 = new User(0L,Role.USER,"email3@xyz","password","firstName3","lastName3",50.0f, bankAccounts, relationships);
-//		user1 = userRepository.save(user1);
-//		user2 = userRepository.save(user2);
-//		user3 = userRepository.save(user3);
-//	}
-	
-	@Test
-	public void createUserTest() {
-		List<BankAccount> bankAccounts = null;
-		List<Relationship> relationships = null;
-		User user = new User(0L, Role.USER,"email@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+	@BeforeAll
+	private void init() {
+		transactionRepository.deleteAll();
+		userRepository.deleteAll();
+		bankAccountRepository.deleteAll();
 		
-		Optional<User> opt = Optional.of(user);
-		
-		when(utility.encoder(any(String.class))).thenReturn("password");
-		when(userRepository.save(user)).thenReturn(user);
-	
-		User responseUser = userService.createUser(user);
-				
-		assertThat(responseUser.getEmail().equals(user.getEmail()));
+		List<BankAccount> bankAccounts = new ArrayList<>();
+		List<Relationship> relationships = new ArrayList<>();
+		User user1 = new User(0L, Role.USER,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+		User user2 = new User(0L, Role.USER,"email2@xyz","password","firstName2","lastName2",50.0f, bankAccounts, relationships);
+		User user3 = new User(0L,Role.USER,"email3@xyz","password","firstName3","lastName3",50.0f, bankAccounts, relationships);
+		user1 = userRepository.save(user1);
+		user2 = userRepository.save(user2);
+		user3 = userRepository.save(user3);
 	}
 	
-	/*
+//	@Test
+//	public void createUserTest() {
+//		List<BankAccount> bankAccounts = null;
+//		List<Relationship> relationships = null;
+//		User user = new User(0L, Role.USER,"email@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+//		
+//		//User responseUser = userRepository.save(user);
+//		User responseUser = userService.createUser(user);
+//				
+//		assertThat(responseUser.getEmail().equals(user.getEmail()));
+//	}
+	
+	
 	@Test
 	public void addRelationshipTest() {
 		User user1 =null;
