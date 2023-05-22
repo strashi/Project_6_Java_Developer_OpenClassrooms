@@ -183,6 +183,7 @@ public class UserServiceImpl implements UserService {
 		try {
 
 			BankAccount bankAccount = bankAccountRepository.findByIbanNumber(ibanNumber);
+			System.out.println(bankAccount);
 			String description = "Reload from " + bankAccount.getAccountDescription();
 			User admin = userRepository.findByEmail("admin@paymybuddy.com")
 					.orElseThrow(() -> new UsernameNotFoundException("User not present"));

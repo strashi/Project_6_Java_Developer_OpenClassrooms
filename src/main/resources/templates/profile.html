@@ -29,7 +29,7 @@
 			<div class="d-flex p-2 justify-content-center">
 				<input type="text" name="email" th:field="*{email}" />
 			</div>
-			<!-- th:field="*{email}"  -->
+			
 			<div class="alert alert-primary" role="alert" th:text="${success}"
 				th:if="${success}"></div>
 			<div class="alert alert-danger" role="alert" th:text="${error}"
@@ -39,19 +39,17 @@
 			<div class="d-flex p-2 justify-content-center">
 				<input type="password" name="password" />
 			</div>
-			<!-- th:field="*{password}" -->
-
+		
 			First Name:
 			<div class="d-flex p-2 justify-content-center">
 				<input type="text" name="firstName" th:field="*{firstName}" />
 			</div>
-			<!--th:field="*{firstName}"  -->
-
+		
 			Last Name:
 			<div class="d-flex p-2 justify-content-center">
 				<input type="text" name="lastName" th:field="*{lastName}" />
 			</div>
-			<!-- th:field="*{lastName}" -->
+		
 
 			<div class="d-flex p-2 justify-content-center">
 				<input class="btn btn-primary" type="submit" value="Update" />

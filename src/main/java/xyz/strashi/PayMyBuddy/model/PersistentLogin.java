@@ -9,7 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
-
+/**
+ * Class for the remember-me option
+ * @author steve
+ *
+ */
 @Data
 @Entity
 @Table(name="persistent_logins")

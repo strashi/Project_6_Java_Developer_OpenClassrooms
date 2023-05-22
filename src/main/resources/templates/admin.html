@@ -13,9 +13,6 @@
 
 	<div th:insert="navbar.html::navbar"></div>
 
-	<h3>
-		<a th:href="@{/createUser}">Create user</a>
-	</h3>
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb ms-3">
 			<li class="breadcrumb-item active" aria-current="page">Home</li>
@@ -42,9 +39,7 @@
 				</select> <input type="number" name="amount" min="0" /> <input
 					type="submit" name="deposit" value="Deposit!" />
 			</form>
-			<h5>
-				<a th:href="@{/addBankAccount}">Add Bank Account</a>
-			</h5>
+		
 		</section>
 		<section>
 			<div>

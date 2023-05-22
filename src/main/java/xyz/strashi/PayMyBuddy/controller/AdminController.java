@@ -42,7 +42,7 @@ public class AdminController {
 		this.userService = userService;
 		this.transactionService = transactionService;
 	}
-	@RolesAllowed("ADMIN")
+	//@RolesAllowed("ADMIN")
 	@GetMapping("/admin")
 	public String admin(Model model, Principal principal) {
 		logger.debug("GetMapping sollicité de AdminController");

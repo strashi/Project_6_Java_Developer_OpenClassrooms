@@ -53,10 +53,15 @@ public class ProfileController {
 	public String update(User user, Principal principal, RedirectAttributes redirAttrs) {
 		logger.debug("PostMapping /profile sollicité de ProfileController");
 		try {
-		
-
-			userService.updateUser(user, principal);
-        	return "redirect:/";
+			User userTest = userService.updateUser(user, principal);
+			if(userTest == null) {
+				logger.info("PostMapping /profile user null réussi de ProfileController");
+				redirAttrs.addFlashAttribute("error","Email non valide");
+				return "redirect:/profile";
+			}else {
+				logger.info("PostMapping /profile réussi de ProfileController");
+	        	return "redirect:/";
+			}
 					
 		}catch (Exception e) {
 			logger.error("Erreur au PostMapping /profile du ProfileController", e);

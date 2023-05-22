@@ -44,8 +44,7 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public String executeTransaction(User debitor, User creditor, double amount, String description, boolean getTax) {
 		logger.debug("executeTransaction sollicité de TransactionServiceImpl");
-		if((debitor.getBalance() - amount)>= 0) {
-			
+					
 			try {
 				Transaction transaction = null;
 				try {
@@ -79,10 +78,7 @@ public class TransactionServiceImpl implements TransactionService {
 				logger.error("Erreur au executeTransaction de TransactionServiceImpl", e);
 				return null;
 			}
-		}else {
-			return Status.failed.toString();
-		}
-
+					
 	}
 
 	@Override

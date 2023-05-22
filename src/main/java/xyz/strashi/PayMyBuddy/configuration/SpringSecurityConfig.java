@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import xyz.strashi.PayMyBuddy.service.impl.UserDetailService;
+
 /**
  * Security configuration allowing connection with the app
  * 
@@ -26,84 +27,54 @@ import xyz.strashi.PayMyBuddy.service.impl.UserDetailService;
  */
 @Configuration
 @EnableWebSecurity
-public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
-	
-//	@Autowired
-//	private UserDetailService userDetailsService;
-	
-		
+public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
 	@Autowired
 	private DataSource dataSource;
 
-	
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return new UserDetailService();
 	}
-		 		
 
 	@Override
-	public void configure(HttpSecurity http) throws Exception{
+	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/").hasAnyAuthority("USER","ADMIN")
-		.antMatchers("/admin").hasAuthority("ADMIN")
-		.antMatchers("/createUser").permitAll()
-		.anyRequest().authenticated()
-		.and()
-		.formLogin()
-		  .loginPage("/login")
-	      .permitAll() 
-	      .and()
-	      .rememberMe()
-	      .tokenRepository(persistentTokenRepository())
-	    .and()
-	    .logout()
-	    .logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))
-	    .logoutSuccessUrl("/login")
-	    .permitAll();
-     
-		
+			.antMatchers("/").hasAnyAuthority("USER", "ADMIN")
+			.antMatchers("/admin").hasAuthority("ADMIN")
+			.antMatchers("/createUser").permitAll()
+			.anyRequest().authenticated()
+			.and()
+				.formLogin()
+				.loginPage("/login")
+				.permitAll()
+			.and()
+				.rememberMe().tokenRepository(persistentTokenRepository())
+			.and()
+				.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")).logoutSuccessUrl("/login")
+				.permitAll();
+
 	}
-		
+
 	@Bean
-	public PersistentTokenRepository persistentTokenRepository() {
+	PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
 		tokenRepository.setDataSource(dataSource);
 		return tokenRepository;
 	}
-	
+
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
 
-	
 	@Bean
-	public AuthenticationProvider authenticationProvider() {
+	AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService());
 		authProvider.setPasswordEncoder(passwordEncoder());
 		return authProvider;
 	}
 
-	
-//	@Bean
-//	public DaoAuthenticationProvider authenticationProvider() {
-//		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//		authProvider.setUserDetailsService(userDetailsService());
-//		authProvider.setPasswordEncoder(passwordEncoder());
-//		return authProvider;
-//	}.
-	
-	
-	
-//	 @Override
-//	    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//	        auth.authenticationProvider(authenticationProvider());
-//	    }
-	
-	
-
 }
-

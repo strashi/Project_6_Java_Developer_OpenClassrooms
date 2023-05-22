@@ -26,14 +26,12 @@ public class UserDetailService implements UserDetailsService{
 	@Autowired
 	private UserRepository userRepository;
 	
-	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		logger.debug("loadUserByUsername sollicité de UserDetailService");
 		try {
 			User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not present"));
 			logger.info("loadUserByUsername effectuée de UserDetailService");
-			//return new org.springframework.security.core.userdetails.User(username, user.getPassword(), true, true, true, true, AuthorityUtils.createAuthorityList(user.getRole().toString()));
 			return new CustomUserDetails(user);
 		}catch (Exception e) {
 			logger.error("Erreur au loadUserByUsername de UserDetailService", e);

@@ -21,31 +21,34 @@ import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.service.TransactionService;
 import xyz.strashi.PayMyBuddy.service.UserService;
 import xyz.strashi.PayMyBuddy.tools.Utility;
+
 /**
-* The transaction page. I used the class transactionDTO to change amount from double to String
-* @author steve
-*
-*/
+ * The transaction page. I used the class transactionDTO to change amount from
+ * double to String
+ * 
+ * @author steve
+ *
+ */
 @Controller
 public class TransferController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(TransferController.class);
-	
+
 	private UserService userService;
-	
-	private TransactionService transactionService; 
-	
+
+	private TransactionService transactionService;
+
 	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@Autowired
 	private Utility utility;
-	
+
 	public TransferController(UserService userService, TransactionService transactionService) {
 		this.userService = userService;
 		this.transactionService = transactionService;
 	}
-	
+
 	@GetMapping("/transfer")
 	public String transfer(Model model, Principal principal) {
 		logger.debug("GetMapping /transfer sollicité de TransferController");
@@ -54,68 +57,72 @@ public class TransferController {
 			UserDTO userDTO = modelMapper.map(user, UserDTO.class);
 			userDTO.setBalance(utility.amountFormatter(user.getBalance()));
 			model.addAttribute("userDTO", userDTO);
-		
+
 			List<User> RelationshipsUserList = userService.getRelationshipsUser(user);
 			model.addAttribute("friends", RelationshipsUserList);
 			List<Transaction> transactionsList = transactionService.getTransactions(user);
 			List<TransactionDTO> transactionDTOsList = new ArrayList<>();
-			for(Transaction transaction : transactionsList) {
+			for (Transaction transaction : transactionsList) {
 				TransactionDTO transactionDTO = modelMapper.map(transaction, TransactionDTO.class);
 				transactionDTO.setAmount(utility.amountFormatter(transaction.getAmount()));
 				transactionDTOsList.add(transactionDTO);
 			}
 			model.addAttribute("transactionDTOsList", transactionDTOsList);
 			logger.info("GetMapping /transfer réussi de TransferController");
-		  	return "transfer";
-		}catch (Exception e) {
+			return "transfer";
+		} catch (Exception e) {
 			logger.error("Erreur au GetMapping /transfer du TransferController", e);
 			return null;
 		}
 	}
-	
+
 	@PostMapping("/transfer")
-	public String transfer(Principal principal, String emailCreditor,  double amount, 
-			String description, RedirectAttributes redirAttrs) {
+	public String transfer(Principal principal, String emailCreditor, double amount, String description,
+			RedirectAttributes redirAttrs) {
 		logger.debug("PostMapping /transfer sollicité de TransferController");
 		try {
 			User debitor = userService.findByEmail(principal.getName());
 			User creditor = userService.findByEmail(emailCreditor);
-			if((debitor.getBalance() - amount)>= 0) {
-				transactionService.executeTransaction(debitor, creditor, amount, description,true);
-				logger.info("PostMapping /transfer réussi de TransferController");
-			}else {
-				logger.info("PostMapping /transfer échoué car balance < 0 de TransferController");
-				redirAttrs.addFlashAttribute("error","Solde insuffisant");
+			if (creditor == null) {
+				redirAttrs.addFlashAttribute("error", "Veuillez sélectionner un destinataire");
+			} else {
+				if ((debitor.getBalance() - amount) >= 0) {
+					transactionService.executeTransaction(debitor, creditor, amount, description, true);
+					logger.info("PostMapping /transfer réussi de TransferController");
+					redirAttrs.addFlashAttribute("success", "Versement effectué !");
+				} else {
+					logger.info("PostMapping /transfer échoué car balance < 0 de TransferController");
+					redirAttrs.addFlashAttribute("error", "Solde insuffisant");
+				}
 			}
-			
 			return "redirect:/transfer";
-		}catch (Exception e) {
+		} catch (Exception e) {
 			logger.error("Erreur au PostMapping /transfer du TransferController", e);
 			return null;
 		}
 	}
-	
+
 	@GetMapping("/addRelationship")
 	public String addRelationship() {
 		logger.debug("GetMapping /addRelationship sollicité de TransferController");
 		try {
 			logger.info("GetMapping /addRelationship réussi de TransferController");
 			return "addRelationship";
-		}catch (Exception e) {
+		} catch (Exception e) {
 			logger.error("Erreur au PostMapping /addRelationship du TransferController", e);
 			return null;
 		}
 	}
-	
-	@PostMapping("/addRelationship" )
+
+	@PostMapping("/addRelationship")
 	public String addRelationship(Principal principal, String emailFriend) {
 		logger.debug("PostMapping /addRelationship sollicité de TransferController");
-		try{
+		try {
 			String emailUser = principal.getName();
-			userService.addRelationship(emailUser,emailFriend);
+			userService.addRelationship(emailUser, emailFriend);
 			logger.info("PostMapping /addRelationship réussi de TransferController");
 			return "redirect:/transfer";
-		}catch (Exception e) {
+		} catch (Exception e) {
 			logger.error("Erreur au PostMapping /addRelationship du TransferController", e);
 			return null;
 		}

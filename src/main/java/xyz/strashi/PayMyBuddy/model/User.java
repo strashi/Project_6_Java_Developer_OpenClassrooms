@@ -77,11 +77,6 @@ public class User  {
 	@OneToMany(cascade = CascadeType.ALL , orphanRemoval = true)
 	@JoinColumn(name="user_id")
 	List<Relationship> friends= new ArrayList<>();
-	
-	
-	/*
-	public List<BankAccount> getBankAccounts(){
-		return new ArrayList<BankAccount>(this.getBankAccounts());
 		
-	}*/
+	
 }

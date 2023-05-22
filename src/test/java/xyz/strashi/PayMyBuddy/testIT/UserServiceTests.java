@@ -1,6 +1,7 @@
 package xyz.strashi.PayMyBuddy.testIT;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import xyz.strashi.PayMyBuddy.model.BankAccount;
@@ -21,6 +23,7 @@ import xyz.strashi.PayMyBuddy.repository.BankAccountRepository;
 import xyz.strashi.PayMyBuddy.repository.TransactionRepository;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
 import xyz.strashi.PayMyBuddy.service.UserService;
+import xyz.strashi.PayMyBuddy.tools.Utility;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
@@ -38,12 +41,26 @@ public class UserServiceTests {
 	@Autowired
 	private TransactionRepository transactionRepository;
 	
-//	@BeforeEach
-//	public void delete() {
-//		userRepository.deleteAll();
-//		bankAccountRepository.deleteAll();
-//		
-//	}
+	@Autowired
+	private Utility utility;
+	
+	@Value("${config.system.admin.email}")
+	private String emailAdmin;
+
+	@Value("${config.system.admin.firstName}")
+	private String firstNameAdmin;
+
+	@Value("${config.system.admin.lastName}")
+	private String lastNameAdmin;
+
+	@Value("${config.system.admin.balance}")
+	private double balanceAdmin;
+
+	@Value("${config.system.admin.password}")
+	private String passwordAdmin;
+
+	@Value("${config.system.admin.role}")
+	private Role roleAdmin;
 	
 	@BeforeAll
 	private void init() {
@@ -59,19 +76,32 @@ public class UserServiceTests {
 		user1 = userRepository.save(user1);
 		user2 = userRepository.save(user2);
 		user3 = userRepository.save(user3);
+		
+		
+			String hashedPassword = utility.encoder(passwordAdmin);
+			User adminSystem = new User();
+			adminSystem.setEmail(emailAdmin);
+			adminSystem.setFirstName(firstNameAdmin);
+			adminSystem.setLastName(lastNameAdmin);
+			adminSystem.setRole(roleAdmin);
+			adminSystem.setBalance(balanceAdmin);
+			adminSystem.setPassword(hashedPassword);
+			if (!userRepository.findByEmail(emailAdmin).isPresent()) {
+				userRepository.save(adminSystem);
+			}
+		
 	}
 	
-//	@Test
-//	public void createUserTest() {
-//		List<BankAccount> bankAccounts = null;
-//		List<Relationship> relationships = null;
-//		User user = new User(0L, Role.USER,"email@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
-//		
-//		//User responseUser = userRepository.save(user);
-//		User responseUser = userService.createUser(user);
-//				
-//		assertThat(responseUser.getEmail().equals(user.getEmail()));
-//	}
+	@Test
+	public void createUserTest() {
+		List<BankAccount> bankAccounts = null;
+		List<Relationship> relationships = null;
+		User user = new User(0L, Role.USER,"email@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
+		
+		User responseUser = userService.createUser(user);
+				
+		assertEquals(user.getEmail(),responseUser.getEmail());
+	}
 	
 	
 	@Test
@@ -79,14 +109,7 @@ public class UserServiceTests {
 		User user1 =null;
 		User user2 = null;
 		User user3 = null;
-//		List<BankAccount> bankAccounts = null;
-//		List<Relationship> relationships = new ArrayList<>();
-//		User user1 = new User(0L, Role.USER,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
-//		User user2 = new User(0L, Role.USER,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
-//		User user3 = new User(0L,Role.USER,"email3@xyz","password","firstName3","lastName3",50.0f, null, relationships);
-//		user1 = userRepository.save(user1);
-//		user2 = userRepository.save(user2);
-//		user3 = userRepository.save(user3);
+
 		Optional<User> optUser1 = userRepository.findByEmail("email1@xyz");
 		if(!optUser1.isEmpty())
 			user1 = optUser1.get();
@@ -111,22 +134,14 @@ public class UserServiceTests {
 		User responseUser1 = relationsList.get(0).getFriend();
 		User responseUser2 = relationsList.get(1).getFriend();
 				
-		assertThat(responseUser1.equals(user2)) ;
-		assertThat(responseUser2.equals(user3)) ;
+		assertEquals(responseUser1.getEmail(),user2.getEmail()) ;
+		assertEquals(responseUser2.getEmail(),user3.getEmail()) ;
 		
 	}
 	
 	@Test
 	public void getRelationshipTest() {
 		
-//		List<BankAccount> bankAccounts = null;
-//		List<Relationship> relationships = new ArrayList<>();
-//		User user1 = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
-//		User user2 = new User(0L,Role.USER,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
-//		User user3 = new User(0L,Role.USER,"email3@xyz","password","firstName3","lastName3",50.0f, null, relationships);
-//		user1 = userRepository.save(user1);
-//		user2 = userRepository.save(user2);
-//		user3 = userRepository.save(user3);
 		User user1 =null;
 		User user2 = null;
 		User user3 = null;
@@ -153,20 +168,14 @@ public class UserServiceTests {
 		User responseUser1 = relationshipsList.get(0).getFriend();
 		User responseUser2 = relationshipsList.get(1).getFriend();
 				
-		assertThat(responseUser1.equals(user2)) ;
-		assertThat(responseUser2.equals(user3)) ;
+		assertEquals(responseUser1.getEmail(),user2.getEmail()) ;
+		assertEquals(responseUser2.getEmail(),user3.getEmail()) ;
 
 	}
 	
 	@Test
 	public void addBankAccountTest() {
-		//List<BankAccount> bankAccounts = new ArrayList<>();
 	
-		//BankAccount bankAccount = new BankAccount(0L,description,ibanNumber);
-		//bankAccounts.add(bankAccount);
-//		List<Relationship> relationships = new ArrayList<>();
-//		User user = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
-//		user = userRepository.save(user);
 		User user1 = null;
 		
 		Optional<User> optUser1 = userRepository.findByEmail("email1@xyz");
@@ -178,72 +187,68 @@ public class UserServiceTests {
 		
 		User response = userService.addBankAccount(user1,description, ibanNumber);
 		
-		assertThat(ibanNumber.equals(response.getBankAccounts().get(0).getIbanNumber()));
+		assertEquals(ibanNumber,response.getBankAccounts().get(0).getIbanNumber());
 	}
 	
 	
 	@Test
 	public void getBankAccountsTest() {
 		List<BankAccount> bankAccounts = new ArrayList<>();
-		//List<Relationship> relationships = new ArrayList<>();
+		
 		BankAccount bankAccount = new BankAccount(0L,"compte secret","FR555555555");
 		BankAccount bankAccount2 = new BankAccount(0L,"compte bancaire","FRXXXXXXXXXXX");
 
 		bankAccounts.add(bankAccount);
 		bankAccounts.add(bankAccount2);
-//		User user = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
-//		user = userRepository.save(user);
 		
 		User user1 = null;
 		
-		Optional<User> optUser1 = userRepository.findByEmail("email1@xyz");
+		Optional<User> optUser1 = userRepository.findByEmail("email2@xyz");
 		if(!optUser1.isEmpty())
 			user1 = optUser1.get();
 		user1.setBankAccounts(bankAccounts);
 		userRepository.save(user1);
 		
 		List<BankAccount> response = userService.getBankAccounts(user1);
-		//System.out.println(bankAccount.getIbanNumber());
-		//System.out.println(bankAccount2.getIbanNumber());
-		assertThat(response.size() == 2);
-		assertThat(bankAccount.getIbanNumber().equals(response.get(0).getIbanNumber()));
-		assertThat(bankAccount2.getIbanNumber().equals(response.get(1).getIbanNumber()));
-
+	
+		assertEquals(response.size(), 2);
+		assertEquals(bankAccount.getIbanNumber(),response.get(0).getIbanNumber());
+		assertEquals(bankAccount2.getIbanNumber(),response.get(1).getIbanNumber());
+	
 	}
 	
 	
 	@Test
 	public void depositMoneyTest() {
-//		User user = new User(0L,"email1@xyz","password","firstName","lastName",50.0f, null, null);
-//		user = userRepository.save(user);
 		
 		User user1 = null;
-		
 		Optional<User> optUser1 = userRepository.findByEmail("email1@xyz");
 		if(!optUser1.isEmpty())
 			user1 = optUser1.get();
-		userService.depositMoney(user1,"ibantest", 100.0f);
 		
-		assertThat(user1.getBalance() == 150);
+		String description = "compte courant";
+		String ibanNumber = "FR552545658552";
+		
+		userService.addBankAccount(user1,description, ibanNumber);
+		
+		userService.depositMoney(user1,"FR552545658552", 100.0d);
+				
+		assertEquals(150, user1.getBalance());
+
 	}
-	/*
+	
 	@Test
 	public void findByEmailTest() {
 		List<BankAccount> bankAccounts = null;
 		List<Relationship> relationships = null;
 		User user = new User(0L, Role.USER,"email4@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
-		
-		//User responseUser = userRepository.save(user);
-		User responseUser = userService.createUser(user);
+							
+		userService.createUser(user);
 		
 		User userToFind = userService.findByEmail(user.getEmail());
-//		System.out.println(responseUser.getFirstName());
-//		System.out.println(userToFind.getLastName());
-//		System.out.println(userToFind.getUserId());
 
-
-		assertThat(user.equals(userToFind));
-		assertFalse(user.getFirstName() == userToFind.getLastName());
-	}*/
-	
+		assertTrue(user.getLastName().equals(userToFind.getLastName()) );
+		assertEquals(userToFind.getFirstName(),user.getFirstName());
+		
+	}
 }

@@ -45,17 +45,20 @@ public class HomeController {
 	@GetMapping("/")
 	public String home(Model model, Principal principal) {
 		logger.debug("GetMapping/ sollicité de HomeController");
-		try {			
+		try {
 			User user = userService.findByEmail(principal.getName());
-			System.out.println(user);
-			UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-			userDTO.setBalance(utility.amountFormatter(user.getBalance()));
-			model.addAttribute("userDTO", userDTO);
-							
-			List<BankAccount> bankAccountsList= userService.getBankAccounts(user);
-			model.addAttribute("bankAccounts", bankAccountsList);
-			logger.info("GetMapping / réussi de HomeController");
-			return "home";
+			if(user == null) {
+				return "/login";
+			}else {
+				UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+				userDTO.setBalance(utility.amountFormatter(user.getBalance()));
+				model.addAttribute("userDTO", userDTO);
+								
+				List<BankAccount> bankAccountsList= userService.getBankAccounts(user);
+				model.addAttribute("bankAccounts", bankAccountsList);
+				logger.info("GetMapping / réussi de HomeController");
+				return "home";
+			}
 		}catch (Exception e) {
 			logger.error("Erreur au GetMapping / du HomeController", e);
 			return null;

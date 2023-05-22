@@ -30,7 +30,6 @@ import xyz.strashi.PayMyBuddy.service.UserService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestInstance(Lifecycle.PER_CLASS)
 public class HomeControllerTests {
 	
 	@MockBean
@@ -38,10 +37,7 @@ public class HomeControllerTests {
 	
 	@Autowired
 	private MockMvc mockMvc;
-	
-
-	//@WithMockUser(username = "email1@xyz", password = "password", authorities= {"USER"})
-	
+			
 	@Test
 	@WithMockUser(username = "email1@xyz",password = "password",authorities= {"USER"})
 	public void testHome() throws Exception{
@@ -49,6 +45,16 @@ public class HomeControllerTests {
 		when(userService.findByEmail(any(String.class))).thenReturn(user);
 		
 		mockMvc.perform(get("/")).andExpect(status().isOk()).andDo(print());
+		
+	}
+	
+	@Test
+	@WithMockUser(username = "email1@xyz",password = "password",authorities= {"ANONYMOUS"})
+	public void testHome2() throws Exception{
+		User user = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0d, null, null);
+		when(userService.findByEmail(any(String.class))).thenReturn(user);
+		
+		mockMvc.perform(get("/")).andExpect(status().isForbidden()).andDo(print());
 		
 	}
 	

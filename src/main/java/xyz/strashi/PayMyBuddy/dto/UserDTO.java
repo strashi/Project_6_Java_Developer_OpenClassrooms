@@ -8,7 +8,11 @@ import javax.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+/**
+ * DTO Classes are used to convert double to string in the aim to display them with two decimals
+ * @author steve
+ *
+ */
 
 @Data
 @AllArgsConstructor
