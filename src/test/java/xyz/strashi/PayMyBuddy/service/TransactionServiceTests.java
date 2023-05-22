@@ -1,8 +1,8 @@
 package xyz.strashi.PayMyBuddy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -18,16 +18,12 @@ import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
 import xyz.strashi.PayMyBuddy.model.Role;
 import xyz.strashi.PayMyBuddy.model.Status;
-import xyz.strashi.PayMyBuddy.model.Transaction;
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.repository.TransactionRepository;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
 
 @SpringBootTest
 public class TransactionServiceTests {
-	
-	@Autowired
-	private UserService userService;
 	
 	@MockBean
 	private UserRepository userRepository;
@@ -38,12 +34,6 @@ public class TransactionServiceTests {
 	@Autowired
 	private TransactionService transactionService;
 	
-//	@BeforeEach
-//	public void init() {
-//		userRepository.deleteAll();
-//		
-//	}
-//	
 	@Test
 	public void executeTransactionTest() {
 		List<BankAccount> bankAccounts = null;
@@ -54,15 +44,10 @@ public class TransactionServiceTests {
 		
 		when(userRepository.save(creditor)).thenReturn(creditor);
 		when(userRepository.save(debitor)).thenReturn(debitor);
-		//userRepository.save(admin);
-//		when(debitor.getBalance()).thenReturn(100d);
-//		when(creditor.getBalance()).thenReturn(0d);
-		//doNothing().when(transactionRepository.save(any(Transaction.class)));
-
-		
+			
 		String status = transactionService.executeTransaction(creditor, debitor, 50, "resto",false);
 		
-		assertThat(status.equals(Status.ok.toString()));
+		assertTrue(status.equals(Status.ok.toString()));
 	}
 	
 	@Test
@@ -72,11 +57,10 @@ public class TransactionServiceTests {
 		User admin = new User(0L,Role.ADMIN,"admin","password","firstName","lastName",50.0f, null, null);
 		Optional<User> opt = Optional.of(admin);
 		when(userRepository.findByEmail(any(String.class))).thenReturn(opt);
-		//User user1 = userRepository.findByEmail("email1@xyz").orElseThrow(() -> new UsernameNotFoundException("User not present"));
-		
+				
 		String status = transactionService.getTax(debitor, 50d);
 		
-		assertThat(status.equals(Status.ok.toString()));
+		assertTrue(status.equals(Status.ok.toString()));
 			
 		
 	}
