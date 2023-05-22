@@ -133,7 +133,7 @@ public class UserServiceTests {
 		BankAccount bankAccount = new BankAccount(0L,"compte secret","ibantest");
 		List<BankAccount> bankAccounts = new ArrayList<>();
 		bankAccounts.add(bankAccount);
-		User user = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, null);
+		User user = new User(1L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, bankAccounts, null);
 
 		User adminSystem = new User();
 		adminSystem.setEmail(emailAdmin);
@@ -144,15 +144,14 @@ public class UserServiceTests {
 		adminSystem.setPassword(passwordAdmin);
 		Optional<User> optAdmin = Optional.of(adminSystem);
 		
-		String ibanNumber = null;
-		String description = null;
-		double amount = 0;
+		String description = "Reload from compte secret";
+		double amount = 100d;
 
 		when(bankAccountRepository.findByIbanNumber(any(String.class))).thenReturn(bankAccount);
 		when(userRepository.findByEmail("admin@paymybuddy.com")).thenReturn(optAdmin);
 		when(transactionService.executeTransaction(adminSystem, user, amount, description, false)).thenReturn("ok");
 		
-		userService.depositMoney(user,"ibantest", 100.0f);
+		userService.depositMoney(user,"ibantest", 100.0d);
 		
 		verify(transactionService,times(1)).executeTransaction(adminSystem, user, amount, description, false);
 		
