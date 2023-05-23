@@ -12,7 +12,7 @@
 
 #### Informations for databases creation:
    
- The [SQL Scripts](https://github.com/strashi/PayMyBuddy/tree/develop/resources), one for the production database and the other for the tests
+ The [SQL Scripts](https://github.com/strashi/PayMyBuddy/tree/develop/resources), one for the production database, called payMyBuddy_db and the other for the tests, called pmbTest_db.
 
 #### Informations for databases connection:
 - username: root
