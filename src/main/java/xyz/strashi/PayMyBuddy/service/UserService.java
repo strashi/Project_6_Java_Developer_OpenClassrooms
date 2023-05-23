@@ -2,7 +2,6 @@ package xyz.strashi.PayMyBuddy.service;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;

@@ -1,6 +1,5 @@
 package xyz.strashi.PayMyBuddy.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import xyz.strashi.PayMyBuddy.model.BankAccount;
 import xyz.strashi.PayMyBuddy.model.Relationship;
 import xyz.strashi.PayMyBuddy.model.Role;
 import xyz.strashi.PayMyBuddy.model.Status;
@@ -36,12 +34,10 @@ public class TransactionServiceTests {
 	
 	@Test
 	public void executeTransactionTest() {
-		List<BankAccount> bankAccounts = null;
+		
 		List<Relationship> relationships = new ArrayList<>();
 		User creditor = new User(1L,Role.USER,"email1@xyz","password","firstName","lastName",50.0f, null, relationships);
 		User debitor = new User(2L,Role.USER,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
-		//User admin = new User(2L,Role.ADMIN,"admin@paymybuddy.com","password","firstName","lastName",50.0f, null, null);
-		
 		when(userRepository.save(creditor)).thenReturn(creditor);
 		when(userRepository.save(debitor)).thenReturn(debitor);
 			

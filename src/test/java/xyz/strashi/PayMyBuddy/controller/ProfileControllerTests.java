@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -32,19 +31,19 @@ public class ProfileControllerTests {
 		
 		mockMvc.perform(get("/profile")).andExpect(status().isOk()).andDo(print());
 	}
-	/*
+	
 	@Test
 	@WithMockUser(username = "email1@xyz",password = "password",authorities= {"USER"})
 	public void testUpdate() throws Exception {
 		
 		User user = new User(0L,Role.USER,"email1@xyz","password","firstName","lastName",50.0d, null, null);
 		
-		RequestBuilder request = MockMvcRequestBuilders.put("/profile")
+		RequestBuilder request = MockMvcRequestBuilders.post("/profile")
 				.param("user", user.toString()).param("principal","principal").param("redirAttrs", "redirAttrs").accept(MediaType.APPLICATION_FORM_URLENCODED_VALUE).with(csrf());
 						
 		mockMvc.perform(request)
 		.andExpect(status().isFound()).andDo(print())
 		.andExpect(view().name("redirect:/"));
 		
-	}*/
+	}
 }

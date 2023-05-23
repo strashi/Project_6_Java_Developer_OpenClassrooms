@@ -1,9 +1,7 @@
-package xyz.strashi.PayMyBuddy.service.impl;
+package xyz.strashi.PayMyBuddy.tools;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import xyz.strashi.PayMyBuddy.model.User;
 
 public class CustomUserDetails implements UserDetails {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private User user;
 	
@@ -54,8 +54,5 @@ public class CustomUserDetails implements UserDetails {
 		return true;
 	}
 	
-//	 public String getFullName() {
-//	        return user.getFirstName() + " " + user.getLastName();
-//	    }
 
 }

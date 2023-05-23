@@ -78,17 +78,17 @@ public class UserServiceTests {
 		user3 = userRepository.save(user3);
 		
 		
-			String hashedPassword = utility.encoder(passwordAdmin);
-			User adminSystem = new User();
-			adminSystem.setEmail(emailAdmin);
-			adminSystem.setFirstName(firstNameAdmin);
-			adminSystem.setLastName(lastNameAdmin);
-			adminSystem.setRole(roleAdmin);
-			adminSystem.setBalance(balanceAdmin);
-			adminSystem.setPassword(hashedPassword);
-			if (!userRepository.findByEmail(emailAdmin).isPresent()) {
-				userRepository.save(adminSystem);
-			}
+		String hashedPassword = utility.encoder(passwordAdmin);
+		User adminSystem = new User();
+		adminSystem.setEmail(emailAdmin);
+		adminSystem.setFirstName(firstNameAdmin);
+		adminSystem.setLastName(lastNameAdmin);
+		adminSystem.setRole(roleAdmin);
+		adminSystem.setBalance(balanceAdmin);
+		adminSystem.setPassword(hashedPassword);
+		if (!userRepository.findByEmail(emailAdmin).isPresent()) {
+			userRepository.save(adminSystem);
+		}
 		
 	}
 	

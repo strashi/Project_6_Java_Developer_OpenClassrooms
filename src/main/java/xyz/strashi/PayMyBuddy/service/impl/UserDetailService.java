@@ -3,8 +3,6 @@ package xyz.strashi.PayMyBuddy.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import xyz.strashi.PayMyBuddy.model.User;
 import xyz.strashi.PayMyBuddy.repository.UserRepository;
+import xyz.strashi.PayMyBuddy.tools.CustomUserDetails;
 
 /**
  * Class used for the authentication

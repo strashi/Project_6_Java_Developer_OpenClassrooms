@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +27,6 @@ import xyz.strashi.PayMyBuddy.repository.UserRepository;
 import xyz.strashi.PayMyBuddy.tools.Utility;
 
 @SpringBootTest
-//@TestInstance(Lifecycle.PER_CLASS)
 public class UserServiceTests {
 	
 	@Autowired
@@ -74,8 +71,6 @@ public class UserServiceTests {
 		List<Relationship> relationships = null;
 		User user = new User(0L, Role.USER,"email@xyz","password","firstName","lastName",50.0f, bankAccounts, relationships);
 		
-		Optional<User> opt = Optional.of(user);
-		
 		when(utility.encoder(any(String.class))).thenReturn("password");
 		when(userRepository.save(user)).thenReturn(user);
 	
@@ -87,11 +82,9 @@ public class UserServiceTests {
 	@Test
 	public void getRelationshipTest() {
 		
-		List<BankAccount> bankAccounts = null;
 		List<Relationship> relationships = new ArrayList<>();
 		
 		User user2 = new User(0L,Role.USER,"email2@xyz","password","firstName2","lastName2",50.0f, null, relationships);
-		User user3 = new User(0L,Role.USER,"email3@xyz","password","firstName3","lastName3",50.0f, null, relationships);
 		Date date = new Date();
 		Relationship relationship = new Relationship(0L,user2,date);
 		relationships.add(relationship);
@@ -108,7 +101,7 @@ public class UserServiceTests {
 	@Test
 	public void getBankAccountsTest() {
 		List<BankAccount> bankAccounts = new ArrayList<>();
-		//List<Relationship> relationships = new ArrayList<>();
+		
 		BankAccount bankAccount = new BankAccount(0L,"compte secret","FR555555555");
 		BankAccount bankAccount2 = new BankAccount(0L,"compte bancaire","FRXXXXXXXXXXX");
 

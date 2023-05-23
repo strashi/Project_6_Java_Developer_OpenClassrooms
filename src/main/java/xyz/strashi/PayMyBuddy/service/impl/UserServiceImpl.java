@@ -230,7 +230,7 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 	}
-
+	@Override
 	public List<User> getRelationshipsUser(User user) {
 		logger.debug("getRelationshipsUser sollicité de UserServiceImpl");
 		try {
@@ -277,7 +277,7 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 	}
-
+	@Override
 	public User findByEmail(String email) {
 		logger.debug("findByEmail sollicité de UserServiceImpl");
 		try {

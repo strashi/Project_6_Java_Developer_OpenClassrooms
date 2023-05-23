@@ -10,23 +10,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-//@WebMvcTest(controllers = LoginController.class)
 @SpringBootTest
-@AutoConfigureMockMvc//(addFilters=false)
+@AutoConfigureMockMvc
 public class LoginControllerTests {
 
 	@Autowired
 	private MockMvc mockMvc;
-	/*
-	@MockBean
-	private UserService userService ;
 	
-	@MockBean
-	private UserDetailService userDetailService;
-	
-	@MockBean
-	private Utility utility;
-	*/
 	@Test
 	public void testLogin() throws Exception{
 		
