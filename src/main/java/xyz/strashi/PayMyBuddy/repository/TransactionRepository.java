@@ -10,7 +10,7 @@ import xyz.strashi.PayMyBuddy.model.Transaction;
 import xyz.strashi.PayMyBuddy.model.User;
 
 public interface TransactionRepository extends JpaRepository<Transaction,Long>{
-
+	
 	List<Transaction> findByDebitor(User user);
 	
 	@Query("SELECT t FROM Transaction t WHERE t.creditor = :user OR t.debitor = :user")
