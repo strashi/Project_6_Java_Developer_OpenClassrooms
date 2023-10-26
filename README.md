@@ -19,7 +19,7 @@ Project realized with :
 - SpringBoot Security
 - MySQL 8.0.35
 - Java 8
-- Bootstrap v5.0
+- Bootstrap v5.3.0
 
 Pay My Buddy is an application who sets up and manages money transfer between users of the app.
 
