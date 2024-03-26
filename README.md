@@ -32,13 +32,13 @@ Pay My Buddy is an application who sets up and manages money transfer between us
 
 # PayMyBuddy Project
 
-### Diagramme des classes du modèle en UML
+### UML Model Class Diagram
 
 ![image](https://user-images.githubusercontent.com/94161747/233578423-380929ae-bd4f-4ede-8eaf-4ef9ef6400c3.png)
 
  <br/> 
  
-### Modèle physique des données
+### Physical Data Model
 
 ![image](https://user-images.githubusercontent.com/94161747/233015412-5de9c661-7103-415a-9838-bfe8a39597b6.png)
 
